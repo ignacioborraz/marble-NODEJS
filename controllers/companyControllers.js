@@ -26,6 +26,7 @@ const companyControllers = {
         let error = null
         try {
             companies = await Company.find()
+            //console.log(companies)
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
