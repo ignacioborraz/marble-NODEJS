@@ -13,7 +13,17 @@ Router.route('/company/:id')
     .put(putCompany)
     .delete(deleteCompany)
 
-const {createPlate,getPlates,getOnePlate,putPlate,deletePlate} = require('./controllers/plateControllers')
+const {createSize,getSizes,getOneSize,deleteSize} = require('./controllers/sizeControllers')
+
+Router.route('/size')
+    .get(getSizes)
+    .post(createSize)
+
+Router.route('/size/:id')
+    .get(getOneSize)
+    .delete(deleteSize)
+
+const {createPlate,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
 
 Router.route('/plate')
     .get(getPlates)
@@ -23,5 +33,8 @@ Router.route('/plate/:id')
     .get(getOnePlate)
     .put(putPlate)
     .delete(deletePlate)
+
+Router.route('/plate/state/:id')
+    .put(changeState)
 
 module.exports = Router //exporto el modulo
