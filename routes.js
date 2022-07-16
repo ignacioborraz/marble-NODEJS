@@ -1,6 +1,28 @@
 const Router = require('express').Router()
 //const validator = require('./config/validator')
-//const passport = require('./config/passport')
+const passport = require('./config/passport')
+
+const {signUp,signIn,signOut,verifyToken,getUsers,getOneUser,putUser,deleteUser} = require('./controllers/userControllers')
+
+Router.route('/auth')
+    .get(getUsers)
+
+Router.route('/auth/:id')
+    .get(getOneUser)
+    .put(putUser)
+    .delete(deleteUser)
+
+Router.route('/auth/sign/up')
+    .post(signUp)
+
+Router.route('/auth/sign/in')
+    .post(signIn)
+
+Router.route('/auth/sign/out')
+    .post(signOut)
+
+Router.route('/auth/sign/token')
+    .post(passport.authenticate('jwt', {session:false}),verifyToken)
 
 const {createCompany,getCompanies,getOneCompany,putCompany,deleteCompany} = require('./controllers/companyControllers')
 

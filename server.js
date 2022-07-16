@@ -12,7 +12,7 @@ app.set('port',PORT)
 
 app.use(cors())
 app.use(express.json())
-app.use('/api', Router)
+app.use('/api/marble', Router)
 
 app.listen(app.get('port'), () =>
     console.log('SERVER READY IN PORT: '+app.get('port'))

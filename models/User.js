@@ -6,11 +6,7 @@ const userSchema = new mongoose.Schema ({
     photoUser: {type:String, required:true},
     mail: {type:String, required:true},
     password: {type:Array, required:true},
-    role: {type:String, required:true},
-    from: {type:Array, required:true},
-    company: {type: mongoose.Types.ObjectId, ref:'companies', required:true},
-    uniqueString: {type:String, required:true},
-    verification: {type:Boolean, required:true}
+    role: {type:String, required:true}
 })
 
 const User = mongoose.model('users',userSchema)
