@@ -77,7 +77,7 @@ const userControllers = {
     },
 
     verifyToken:(req, res) => {
-        //console.log(req.user)
+        console.log(req.user)
         const user = {
             id: req.user.id,
             mail: req.user.mail,
