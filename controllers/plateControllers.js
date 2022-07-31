@@ -1,20 +1,25 @@
 const Plate = require('../models/Plate')
-const Size = require('../models/Size')
+const typeControllers = require('./typeControllers')
+const stateControllers = require('./stateControllers')
 
 const plateControllers = {
 
-    createPlate: async(req,respuesta) => {
-        const {name,photo,size,lot,company} = req.body
+    createPlate: async(req,res) => {
         //console.log(req.body)
         let newPlate = {}
         let error = null
         try {
-            newPlate = await new Plate({name,photo,size,lot,company}).save()
+            let type = await typeControllers.getOneType(req.body.type)
+            //console.log(type)
+            req.body.state = await stateControllers.newState(type)
+            //console.log(req.body)
+            newPlate = await new Plate(req.body)
+            await newPlate.save()
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
         }
-        respuesta.json({
+        res.json({
             response: error ? 'ERROR' : newPlate,
             success: error ? false : true,
             error: error
@@ -26,8 +31,11 @@ const plateControllers = {
         let error = null
         try {
             plates = await Plate.find()
-                .populate("company", {nameCompany:1})
-                .populate("size")
+                .populate("type",{name:1})
+                .populate("color",{name:1})
+                .populate("state")
+                .populate("company",{nameCompany:1})
+            //console.log(plates)
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
@@ -44,9 +52,11 @@ const plateControllers = {
         let onePlate = {}
         let error = null
         try {
-            onePlate = await Plate.findOne({_id:id})
-                .populate("company", {nameCompany:1})
-                .populate("size")
+            onePlate = await Plate.findOne({lot:id})
+                .populate("type",{name:1})
+                .populate("color",{name:1})
+                .populate("state")
+                .populate("company",{companyName:1})
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
@@ -63,7 +73,7 @@ const plateControllers = {
         let putPlate = {}
         let error = null
         try {
-            putPlate = await Plate.findOneAndUpdate({_id:id},req.body,{new: true})
+            putPlate = await Plate.findOneAndUpdate({lot:id},req.body,{new: true})
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
@@ -76,32 +86,23 @@ const plateControllers = {
     },
 
     changeState: async(req,res) => {
-        console.log(req.body)
         let {id} = req.params
-        let state = {state: req.body.state, date: Date.now()}
-        let changePlate = {}
-        let changeSize = {}
+        let plate = {}
         let error = null
         try {
-            changeSize = await new Size(req.body)
-            changeSize.state = state
-            await changeSize.save()
-            try {
-                changePlate = await Plate.findOne({_id:id})
-                    .populate("company", {nameCompany:1})
-                    .populate("size")
-                changePlate.size.push(changeSize._id)
-                await changePlate.save()
-            } catch(errorDeCatcheo) {
-                error='error'
-                console.log(errorDeCatcheo)
-            }
+            plate = await Plate.findOne({lot:id})
+            let newState = await stateControllers.changeState(req.body)
+            console.log(newState)
+            console.log(plate.lot)
+            console.log(plate.state)
+            plate.state.push(newState._id)
+            await plate.save()
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
         }
         res.json({
-            response: error ? 'ERROR' : changePlate,
+            response: error ? 'ERROR' : plate,
             success: error ? false : true,
             error: error
         })
@@ -112,7 +113,7 @@ const plateControllers = {
         let deletePlate = {}
         let error = null
         try {
-            deletePlate = await Plate.findOneAndDelete({_id:id})
+            deletePlate = await Plate.findOneAndDelete({lot:id})
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
@@ -123,7 +124,7 @@ const plateControllers = {
             error: error
         })
     }
-
+    
 }
 
 module.exports = plateControllers

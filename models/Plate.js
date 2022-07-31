@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 
 const plateSchema = new mongoose.Schema ({
-    name: {type:String, required:true}, //nombre
-    photo: {type:String, required:true}, //foto
-    size: [{type: mongoose.Types.ObjectId , ref:'sizes'},],
-    lot: {type:String, required:true}, //lote de la placa
-    //client: {type: mongoose.Types.ObjectId , ref:'clients'},
+    lot: {type:String, },
+    type: {type: mongoose.Types.ObjectId , ref:'types'},
+    color: {type: mongoose.Types.ObjectId , ref:'colors'},
+    state: [{type: mongoose.Types.ObjectId , ref:'states'}],
     company: {type: mongoose.Types.ObjectId , ref:'companies'},
+    comments: {type:String}
 })
 
 const Plate = mongoose.model('plates',plateSchema)

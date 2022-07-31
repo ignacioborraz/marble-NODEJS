@@ -35,15 +35,38 @@ Router.route('/company/:id')
     .put(putCompany)
     .delete(deleteCompany)
 
-const {createSize,getSizes,getOneSize,deleteSize} = require('./controllers/sizeControllers')
+const {createColor,getColors,getOneColor,putColor,deleteColor} = require('./controllers/colorControllers')
 
-Router.route('/size')
-    .get(getSizes)
-    .post(createSize)
+Router.route('/color')
+    .get(getColors)
+    .post(createColor)
 
-Router.route('/size/:id')
-    .get(getOneSize)
-    .delete(deleteSize)
+Router.route('/color/:id')
+    .get(getOneColor)
+    .put(putColor)
+    .delete(deleteColor)
+
+const {createType,getTypes,getOneType,putType,deleteType} = require('./controllers/typeControllers')
+
+Router.route('/type')
+    .get(getTypes)
+    .post(createType)
+
+Router.route('/type/:id')
+    .get(getOneType)
+    .put(putType)
+    .delete(deleteType)
+
+const {createState,getStates,getOneState,putState,deleteState} = require('./controllers/stateControllers')
+
+Router.route('/state')
+    .get(getStates)
+    .post(createState)
+
+Router.route('/state/:id')
+    .get(getOneState)
+    .put(putState)
+    .delete(deleteState)
 
 const {createPlate,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
 
@@ -57,6 +80,6 @@ Router.route('/plate/:id')
     .delete(deletePlate)
 
 Router.route('/plate/state/:id')
-    .put(changeState)
+    .post(changeState)
 
 module.exports = Router //exporto el modulo
