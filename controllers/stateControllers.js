@@ -33,6 +33,7 @@ const stateControllers = {
             })
             newState.date = date
             await newState.save()
+            //console.log(newState)
             return newState
         } catch(errorDeCatcheo) {
             error='error'

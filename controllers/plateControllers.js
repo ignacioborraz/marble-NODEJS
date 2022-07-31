@@ -26,6 +26,24 @@ const plateControllers = {
         })
     },
 
+    createLotsOfPlates:  async(req,res) => {
+        let {lots,company,color,type,comments} = req.body
+        let error = null
+        try {
+            let defaultType = await typeControllers.getOneType(type)
+            let state = await stateControllers.newState(defaultType)
+            await lots.forEach(async (everyLot) => await new Plate({company, color, type, state: state._id, lot: everyLot, comments}).save())
+        } catch(errorDeCatcheo) {
+            error='error'
+            console.log(errorDeCatcheo)
+        }
+        res.json({
+            response: error ? 'ERROR' : lots,
+            success: error ? false : true,
+            error: error
+        })
+    },
+
     getPlates: async(req,res) => {
         let plates = []
         let error = null

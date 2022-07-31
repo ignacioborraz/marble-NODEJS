@@ -68,11 +68,14 @@ Router.route('/state/:id')
     .put(putState)
     .delete(deleteState)
 
-const {createPlate,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
+const {createPlate,createLotsOfPlates,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
 
 Router.route('/plate')
     .get(getPlates)
     .post(createPlate)
+
+    Router.route('/plates')
+    .post(createLotsOfPlates)
 
 Router.route('/plate/:id')
     .get(getOnePlate)
