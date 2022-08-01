@@ -50,7 +50,7 @@ const plateControllers = {
         try {
             plates = await Plate.find()
                 .populate("type",{name:1})
-                .populate("color",{name:1})
+                .populate("color",{name:1,photo:1})
                 .populate("state")
                 .populate("company",{nameCompany:1})
             //console.log(plates)
