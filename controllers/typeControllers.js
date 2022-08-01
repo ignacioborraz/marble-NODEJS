@@ -57,6 +57,23 @@ const typeControllers = {
         }
     },
 
+    getTypesFromCompany: async(req,res) => {
+        let {id} = req.params
+        let types = []
+        let error = null
+        try {
+            types = await Type.find({company:id})
+        } catch(errorDeCatcheo) {
+            error='error'
+            console.log(errorDeCatcheo)
+        }
+        res.json({
+            response: error ? 'ERROR' : types,
+            success: error ? false : true,
+            error: error
+        })
+    },
+
     putType: async(req,res) => {
         let {id} = req.params
         let putType= {}

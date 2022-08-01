@@ -35,22 +35,28 @@ Router.route('/company/:id')
     .put(putCompany)
     .delete(deleteCompany)
 
-const {createColor,getColors,getOneColor,putColor,deleteColor} = require('./controllers/colorControllers')
+const {createColor,getColors,getOneColor,getColorsFromCompany,putColor,deleteColor} = require('./controllers/colorControllers')
 
 Router.route('/color')
     .get(getColors)
     .post(createColor)
+
+Router.route('/colors/:id')
+    .get(getColorsFromCompany)
 
 Router.route('/color/:id')
     .get(getOneColor)
     .put(putColor)
     .delete(deleteColor)
 
-const {createType,getTypes,getOneType,putType,deleteType} = require('./controllers/typeControllers')
+const {createType,getTypes,getOneType,getTypesFromCompany,putType,deleteType} = require('./controllers/typeControllers')
 
 Router.route('/type')
     .get(getTypes)
     .post(createType)
+
+Router.route('/types/:id')
+    .get(getTypesFromCompany)
 
 Router.route('/type/:id')
     .get(getOneType)

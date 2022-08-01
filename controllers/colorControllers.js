@@ -56,6 +56,23 @@ const colorControllers = {
         })
     },
 
+    getColorsFromCompany: async(req,res) => {
+        let {id} = req.params
+        let colors = []
+        let error = null
+        try {
+            colors = await Color.find({company:id})
+        } catch(errorDeCatcheo) {
+            error='error'
+            console.log(errorDeCatcheo)
+        }
+        res.json({
+            response: error ? 'ERROR' : colors,
+            success: error ? false : true,
+            error: error
+        })
+    },
+
     putColor: async(req,res) => {
         let {id} = req.params
         let putColor = {}
