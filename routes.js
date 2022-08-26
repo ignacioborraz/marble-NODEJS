@@ -8,9 +8,9 @@ Router.route('/auth')
     .get(getUsers)
 
 Router.route('/auth/:id')
-    .get(getOneUser)
-    .put(putUser)
-    .delete(deleteUser)
+    .get(passport.authenticate('jwt', {session:false}),getOneUser)
+    .put(passport.authenticate('jwt', {session:false}),putUser)
+    .delete(passport.authenticate('jwt', {session:false}),deleteUser)
 
 Router.route('/auth/sign/up')
     .post(signUp)
