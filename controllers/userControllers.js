@@ -5,21 +5,27 @@ const jwt = require('jsonwebtoken')
 const userControllers = {
 
     signUp: async (req,res) => {
-        const {nameUser, lastNameUser, photoUser, mail, password, role} = req.body
+        const {nick, photo, password, role} = req.body
         try {
-            const user = await User.findOne({mail})
+            const user = await User.findOne({nick})
             const hashWord = bcryptjs.hashSync(password, 10)
             if (!user) {
-                const newUser = await new User(
-                    {nameUser, lastNameUser, photoUser, mail, role, password: [hashWord]}).save()
-                res.json({
-                    success: true, 
-                    message: `${mail}: cuenta creada`
-                }) 
+                try {
+                    await new User({nick, photo, password: [hashWord], role}).save()
+                    res.json({
+                        success: true, 
+                        message: `usuario creado`
+                    }) 
+                } catch (error) {
+                    console.log(error)
+                    res.json({
+                        success: false,
+                        message: `error`})
+                }                
             } else {
                 res.json({
                     success: false,
-                    message: `${mail}: la cuenta ya existe`
+                    message: `usuario ya existe`
                 })
             }
         } catch (error) {
@@ -31,31 +37,31 @@ const userControllers = {
     },
 
     signIn: async (req, res) => {
-        const {mail, password} = req.body
+        const {nick, password} = req.body
         try {
-            const loginUser = await User.findOne({mail})
+            const loginUser = await User.findOne({nick})
             if (!loginUser) {
                 res.json({
                     success: false,
-                    message: `la cuenta no existe`})
+                    message: `verifique los datos`})
             } else {
                 let checkedWord =  loginUser.password.filter(pass => bcryptjs.compareSync(password, pass))
                 if (checkedWord.length===1) {
-                    const user = {id: loginUser._id,
-                        mail: loginUser.mail,
-                        nameUser: loginUser.nameUser,
-                        photoUser: loginUser.photoUser,
+                    const user = {
+                        id: loginUser._id,
+                        nick: loginUser.nick,
+                        photo: loginUser.photo,
                         role: loginUser.role}
                     await loginUser.save()
-                    const token = jwt.sign({id: loginUser._id}, process.env.SECRET_KEY, {expiresIn: 1000*60*60*24 })
+                    const token = jwt.sign({id: loginUser._id}, process.env.SECRET_KEY, {expiresIn: 1000*60*60*24})
                     res.json({
                         response: {token,user}, 
                         success: true, 
-                        message: `bienvenido ${user.nameUser}!`})
+                        message: `bienvenido ${user.nick}!`})
                 } else {
                     res.json({
                         success: false,
-                        message: `contraseña incorrecta`
+                        message: `verifique los datos`
                     })
                 }
             }
@@ -68,8 +74,8 @@ const userControllers = {
     },
 
     signOut: async (req, res) => {
-        const mail = req.body.mail
-        const user = await User.findOne({mail})
+        const id = req.body.id
+        const user = await User.findOne({_id:id})
         await user.save()
         res.json({
             success: true,
@@ -77,18 +83,17 @@ const userControllers = {
     },
 
     verifyToken:(req, res) => {
-        console.log(req.user)
+        //console.log(req.user)
         const user = {
-            id: req.user.id,
-            mail: req.user.mail,
-            nameUser: req.user.nameUser,
-            photoUser: req.user.photoUser,
+            id: req.user._id,
+            nick: req.user.nick,
+            photo: req.user.photo,
             role: req.user.role}
         if (!req.err) {
         res.json({
             success: true,
             response: {user},
-            message: `bienvenido ${user.nameUser}!`}) 
+            message: `bienvenido ${user.nick}!`}) 
         } else {
             res.json({
                 success:false,
