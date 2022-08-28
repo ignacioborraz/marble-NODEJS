@@ -22,7 +22,7 @@ Router.route('/auth/sign/out')
     .post(signOut)
 
 Router.route('/auth/sign/token')
-    .post(passport.authenticate('jwt', {session:false}),verifyToken)
+    .get(passport.authenticate('jwt', {session:false}),verifyToken)
 
 const {createCompany,getCompanies,getOneCompany,putCompany,deleteCompany} = require('./controllers/companyControllers')
 
