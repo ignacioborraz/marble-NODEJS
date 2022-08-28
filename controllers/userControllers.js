@@ -57,7 +57,7 @@ const userControllers = {
                     res.json({
                         response: {token,user}, 
                         success: true, 
-                        message: `bienvenido ${user.nick}!`})
+                        message: `bienvenid@ ${user.nick}!`})
                 } else {
                     res.json({
                         success: false,
@@ -83,7 +83,6 @@ const userControllers = {
     },
 
     verifyToken:(req, res) => {
-        //console.log(req.user)
         const user = {
             id: req.user._id,
             nick: req.user.nick,
@@ -93,7 +92,7 @@ const userControllers = {
         res.json({
             success: true,
             response: {user},
-            message: `bienvenido ${user.nick}!`}) 
+            message: `bienvenid@ ${user.nick}!`}) 
         } else {
             res.json({
                 success:false,
