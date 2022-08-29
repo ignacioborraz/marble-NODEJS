@@ -8,31 +8,33 @@ const userControllers = {
         const {nick, photo, password, role} = req.body
         try {
             const user = await User.findOne({nick})
-            const hashWord = bcryptjs.hashSync(password, 10)
             if (!user) {
                 try {
-                    await new User({nick, photo, password: [hashWord], role}).save()
+                    let hashWord = bcryptjs.hashSync(password, 10)
+                    await new User({nick, photo, password: hashWord, role}).save()
                     res.json({
                         success: true, 
-                        message: `usuario creado`
+                        message: 'usuario creado'
                     }) 
                 } catch (error) {
-                    console.log(error)
+                    console.error(error)
                     res.json({
                         success: false,
-                        message: `error`})
+                        message: 'no se pudo realizar la acción'
+                    })
                 }                
             } else {
                 res.json({
                     success: false,
-                    message: `usuario ya existe`
+                    message: 'usuario ya existe'
                 })
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
             res.json({
                 success: false,
-                message: `error`})
+                message: 'no se pudo realizar la acción'
+            })
         }
     },
 
@@ -43,43 +45,52 @@ const userControllers = {
             if (!loginUser) {
                 res.json({
                     success: false,
-                    message: `verifique los datos`})
+                    message: 'verifique los datos'})
             } else {
-                let checkedWord =  loginUser.password.filter(pass => bcryptjs.compareSync(password, pass))
-                if (checkedWord.length===1) {
-                    const user = {
+                let checked =  bcryptjs.compareSync(password,loginUser.password)
+                if (checked) {
+                    let user = {
                         id: loginUser._id,
                         nick: loginUser.nick,
                         photo: loginUser.photo,
                         role: loginUser.role}
                     await loginUser.save()
-                    const token = jwt.sign({id: loginUser._id}, process.env.SECRET_KEY, {expiresIn: 1000*60*60*24})
+                    let token = jwt.sign({id: loginUser._id}, process.env.SECRET_KEY, {expiresIn: 1000*60*60*24})
                     res.json({
                         response: {token,user}, 
                         success: true, 
-                        message: `bienvenid@ ${user.nick}!`})
+                        message: 'bienvenid@ '+user.nick})
                 } else {
                     res.json({
                         success: false,
-                        message: `verifique los datos`
+                        message: 'verifique los datos'
                     })
                 }
             }
         } catch(error) {
-            console.log(error)
+            console.error(error)
             res.json({
                 success: false,
-                message: 'error'})
+                message: 'no se pudo realizar la acción'
+            })
         }
     },
 
     signOut: async (req, res) => {
-        const id = req.body.id
-        const user = await User.findOne({_id:id})
-        await user.save()
-        res.json({
-            success: true,
-            message: 'hasta pronto!'})
+        const {id} = req.body
+        try {
+            const user = await User.findOne({_id:id})
+            await user.save()
+            res.json({
+                success: true,
+                message: 'hasta pronto!'})
+        } catch(error) {
+            console.error(error)
+            res.json({
+                success: false,
+                message: 'no se pudo realizar la acción'
+            })
+        }
     },
 
     verifyToken:(req, res) => {
@@ -92,82 +103,101 @@ const userControllers = {
         res.json({
             success: true,
             response: {user},
-            message: `bienvenid@ ${user.nick}!`}) 
+            message: 'bienvenid@ '+user.nick})
         } else {
             res.json({
                 success:false,
-                message:"inicia sesión"}) 
+                message:'inicia sesión'}) 
         }
     },
     
     getUsers: async(req,res) => {
-        let users = []
         let error = null
         try {
-            users = await User.find()
+            let users = await User.find()
+            users = users.map(user => { 
+                user = {
+                    id: user._id,
+                    nick: user.nick,
+                    photo: user.photo,
+                    role: user.role
+                }
+                return user
+            })
+            res.json({
+                success: true,
+                response: {users}
+            })
         } catch(errorDeCatcheo) {
             error=errorDeCatcheo
-            console.log(error)
+            console.error(error)
+            res.json({
+                success: false,
+                message: 'no se pudo realizar la acción'
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : users,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     getOneUser: async(req,res) => {
-        let oneUser = {}
         let error = null
-        let {id} = req.params
         try {
-            oneUser = await User.findOne({_id:id})
+            let user = {
+                id: req.user._id,
+                nick: req.user.nick,
+                photo: req.user.photo,
+                role: req.user.role
+            }
+            res.json({
+                success: true,
+                response: {user},
+            })
         } catch(errorDeCatcheo) {
             error=errorDeCatcheo
-            console.log(error)
+            console.error(error)
+            res.json({
+                success: true,
+                message: 'no se pudo realizar la acción'
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : oneUser,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     putUser: async(req,res) => {
-        let putUser = {}
         let error = null
-        let {id} = req.params
         if (req.body.password) {
-            req.body.password = bcryptjs.hashSync(req.body.password, 10) //hasheo la contraseña
+            req.body.password = bcryptjs.hashSync(req.body.password, 10)
         }
         try {
-            putUser = await User.findOneAndUpdate({_id:id},req.body,{new: true})
+            await User.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
+            res.json({
+                success: true,
+                message: 'usuario modificado'
+            })
         } catch(errorDeCatcheo) {
             error=errorDeCatcheo
-            console.log(error)
+            console.error(error)
+            res.json({
+                success: false,
+                message: 'no se pudo realizar la acción'
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : putUser,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     deleteUser: async(req,res) => {
-        let deleteUser = {}
         let error = null
-        let {id} = req.params
         try {
-            deleteUser = await User.findOneAndDelete({_id:id})
+            await User.findOneAndDelete({_id:req.params.id})
+            res.json({
+                success: true,
+                message: 'usuario eliminado'
+            })
         } catch(errorDeCatcheo) {
             error=errorDeCatcheo
-            console.log(error)
+            console.error(error)
+            res.json({
+                success: false,
+                message: 'no se pudo realizar la acción'
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : deleteUser,
-            success: error ? false : true,
-            error: error
-        })
     }
 
 }
