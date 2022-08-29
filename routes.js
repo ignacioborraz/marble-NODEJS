@@ -5,7 +5,7 @@ const passport = require('./config/passport')
 const {signUp,signIn,signOut,verifyToken,getUsers,getOneUser,putUser,deleteUser} = require('./controllers/userControllers')
 
 Router.route('/auth')
-    .get(getUsers)
+    .get(passport.authenticate('jwt', {session:false}),getUsers)
 
 Router.route('/auth/:id')
     .get(passport.authenticate('jwt', {session:false}),getOneUser)
