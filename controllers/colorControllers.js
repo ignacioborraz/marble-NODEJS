@@ -27,57 +27,65 @@ const colorControllers = {
 
     getColors: async(req,res) => {
         let colors = []
-        let error = null
-        let query = {} 
-        if (req.query.color) {
-            console.log(req.query.color)
-            query = {name: req.query.color}
-            console.log(query);
-        }
         try {
-            colors = await Color.find(query)
+            colors = await Color.find()
                 .populate("company", {nameCompany:1})
             //console.log(colors)
+            res.status(200).json({
+                response: colors,
+                success: true
+            })
         } catch(errorDeCatcheo) {
-            error='error'
             console.log(errorDeCatcheo)
+            res.status(400).json({
+                messagge: 'error',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : colors,
-            success: error ? false : true,
-        })
     },
 
     getOneColor: async(req,res) => {
-        let {id} = req.params
-        let oneColor = {}
-        let error = null
+        let color = {}
         try {
-            oneColor = await Color.findOne({_id:id})
+            color = await Color.findOne({_id:req.params.id})
+            res.status(200).json({
+                response: color,
+                success: true
+            })
         } catch(errorDeCatcheo) {
-            error='error'
             console.log(errorDeCatcheo)
+            res.status(400).json({
+                messagge: 'error',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : oneColor,
-            success: error ? false : true,
-        })
     },
 
     getColorsFromCompany: async(req,res) => {
-        let {id} = req.params
         let colors = []
-        let error = null
-        try {
-            colors = await Color.find({company:id})
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        let query = {company: req.params.id} 
+        if (req.query.color) {
+            //console.log(req.query.color)
+            query.name = new RegExp(req.query.color, 'i')
+            /*
+            la ruta en axios para el filtro es
+            http://localhost:8000/api/marble/colors/:id?color=palo
+            */
+            //console.log(query);
         }
-        res.json({
-            response: error ? 'ERROR' : colors,
-            success: error ? false : true,
-        })
+        try {
+            colors = await Color.find(query)
+            res.status(200).json({
+                response: colors,
+                success: true
+            })
+        } catch(errorDeCatcheo) {
+            console.log(errorDeCatcheo)
+            res.status(400).json({
+                messagge: 'error',
+                success: false
+            })
+        }
     },
 
     putColor: async(req,res) => {
