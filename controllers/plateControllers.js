@@ -1,59 +1,50 @@
 const Plate = require('../models/Plate')
 const typeControllers = require('./typeControllers')
 const stateControllers = require('./stateControllers')
+const { query } = require('express')
 
 const plateControllers = {
 
     createPlate: async(req,res) => {
-        //console.log(req.body)
-        let newPlate = {}
-        let error = null
-        try {
-            let type = await typeControllers.getOneType(req.body.type)
-            //console.log(type)
-            req.body.state = await stateControllers.newState(type)
-            //console.log(req.body)
-            newPlate = await new Plate(req.body)
-            await newPlate.save()
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let type = await typeControllers.getOneType(req.body.type) //busco el tipo
+                req.body.state = await stateControllers.newState(type) //actualizo el estado
+                await Plate.create(req.body) //creo la placa
+                res.status(201).json({
+                    messagge: 'placa creada',
+                    success: true
+                })
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : newPlate,
-            success: error ? false : true,
-            error: error
-        })
-    },
 
-    createLotsOfPlates:  async(req,res) => {
-        let {lots,company,color,type,comments} = req.body
-        let error = null
-        try {
-            let defaultType = await typeControllers.getOneType(type)
-            let state = await stateControllers.newState(defaultType)
-            await lots.forEach(async (everyLot) => await new Plate({company, color, type, state: state._id, lot: everyLot, comments}).save())
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
-        }
-        res.json({
-            response: error ? 'ERROR' : lots,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     getPlates: async(req,res) => {
         let plates = []
         let error = null
+/*         let query ={}
+        if (req.query.color) {
+            console.log(req.query.color)
+        } */
         try {
             plates = await Plate.find()
                 .populate("type",{name:1})
                 .populate("color",{name:1,photo:1})
                 .populate("state")
                 .populate("company",{nameCompany:1})
-            //console.log(plates)
+            console.log(plates)
         } catch(errorDeCatcheo) {
             error='error'
             console.log(errorDeCatcheo)
@@ -61,7 +52,6 @@ const plateControllers = {
         res.json({
             response: error ? 'ERROR' : plates,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -82,7 +72,6 @@ const plateControllers = {
         res.json({
             response: error ? 'ERROR' : onePlate,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -99,7 +88,6 @@ const plateControllers = {
         res.json({
             response: error ? 'ERROR' : putPlate,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -122,7 +110,6 @@ const plateControllers = {
         res.json({
             response: error ? 'ERROR' : plate,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -139,7 +126,6 @@ const plateControllers = {
         res.json({
             response: error ? 'ERROR' : deletePlate,
             success: error ? false : true,
-            error: error
         })
     }
     

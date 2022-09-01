@@ -39,7 +39,7 @@ const {createColor,getColors,getOneColor,getColorsFromCompany,putColor,deleteCol
 
 Router.route('/color')
     .get(getColors)
-    .post(createColor)
+    .post(passport.authenticate('jwt', {session:false}),createColor)
 
 Router.route('/colors/:id')
     .get(getColorsFromCompany)
@@ -74,14 +74,11 @@ Router.route('/state/:id')
     .put(putState)
     .delete(deleteState)
 
-const {createPlate,createLotsOfPlates,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
+const {createPlate,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
 
 Router.route('/plate')
     .get(getPlates)
-    .post(createPlate)
-
-    Router.route('/plates')
-    .post(createLotsOfPlates)
+    .post(passport.authenticate('jwt', {session:false}),createPlate)
 
 Router.route('/plate/:id')
     .get(getOnePlate)

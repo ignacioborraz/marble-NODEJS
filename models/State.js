@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const stateSchema = new mongoose.Schema ({
-    state: {type:String, required:true}, //estado
+    state: {type:String, required:true}, //estado de nueva a escuadra/pedazo/retazo
     date: {type: Date}, //fecha
     height: {type:Number, required:true}, //alto
     heightSquare: {type:Number}, //alto de escuadra

@@ -3,29 +3,39 @@ const Color = require('../models/Color')
 const colorControllers = {
 
     createColor: async(req,res) => {
-        const {name,photo,company} = req.body
-        //console.log(req.body)
-        let newColor = {}
-        let error = null        
-        try {
-            newColor = await new Color({name,photo,company}).save()
-            //console.log(newColor)
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                await new Color(req.body).save()
+                res.status(201).json({
+                    messagge: 'material creado',
+                    success: true
+                })
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : newColor,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     getColors: async(req,res) => {
         let colors = []
         let error = null
+        let query = {} 
+        if (req.query.color) {
+            console.log(req.query.color)
+            query = {name: req.query.color}
+            console.log(query);
+        }
         try {
-            colors = await Color.find()
+            colors = await Color.find(query)
                 .populate("company", {nameCompany:1})
             //console.log(colors)
         } catch(errorDeCatcheo) {
@@ -35,7 +45,6 @@ const colorControllers = {
         res.json({
             response: error ? 'ERROR' : colors,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -52,7 +61,6 @@ const colorControllers = {
         res.json({
             response: error ? 'ERROR' : oneColor,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -69,7 +77,6 @@ const colorControllers = {
         res.json({
             response: error ? 'ERROR' : colors,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -86,7 +93,6 @@ const colorControllers = {
         res.json({
             response: error ? 'ERROR' : putColor,
             success: error ? false : true,
-            error: error
         })
     },
 
@@ -103,7 +109,6 @@ const colorControllers = {
         res.json({
             response: error ? 'ERROR' : deleteColor,
             success: error ? false : true,
-            error: error
         })
     }
     
