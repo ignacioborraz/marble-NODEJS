@@ -3,7 +3,7 @@ const Color = require('../models/Color')
 const colorControllers = {
 
     createColor: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+        if (req.user) {
             try {
                 await new Color(req.body).save()
                 res.status(201).json({
@@ -26,7 +26,7 @@ const colorControllers = {
     },
 
     getColors: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+        if (req.user) {
             try {
                 let colors = await Color.find()
                     .populate("company", {nameCompany:1})
@@ -35,7 +35,7 @@ const colorControllers = {
                         if (a.name > b.name) {return 1}
                         if (a.name < b.name) {return -1}
                         return 0
-                      })
+                    })
                     res.status(200).json({
                         response: colors,
                         success: true
@@ -62,7 +62,7 @@ const colorControllers = {
     },
 
     getOneColor: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+        if (req.user) {
             try {
                 let color = await Color.findOne({_id:req.params.id})
                 if (color) {
@@ -92,7 +92,7 @@ const colorControllers = {
     },
 
     getColorsFromCompany: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+        if (req.user) {
             let query = {company: req.params.id} 
             if (req.query.color) {
                 query.name = new RegExp(req.query.color, 'i')
@@ -131,7 +131,7 @@ const colorControllers = {
     },
 
     putColor: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+        if (req.user) {
             try {
                 let color = await Color.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
                 if (color) {
@@ -161,7 +161,7 @@ const colorControllers = {
     },
 
     deleteColor: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+        if (req.user) {
             try {
                 let color = await Color.findOneAndDelete({_id:req.params.id})
                 if (color) {

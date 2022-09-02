@@ -72,16 +72,16 @@ Router.route('/state/:id')
 
 const {createPlate,getPlates,getOnePlate,putPlate,changeState,deletePlate} = require('./controllers/plateControllers')
 
-Router.route('/plate')
-    .get(getPlates)
+Router.route('/plates')
+    .get(passport.authenticate('jwt', {session:false}),getPlates)
     .post(passport.authenticate('jwt', {session:false}),createPlate)
 
-Router.route('/plate/:id')
-    .get(getOnePlate)
-    .put(putPlate)
-    .delete(deletePlate)
+Router.route('/plates/:id')
+    .get(passport.authenticate('jwt', {session:false}),getOnePlate)
+    .put(passport.authenticate('jwt', {session:false}),putPlate)
+    .delete(passport.authenticate('jwt', {session:false}),deletePlate)
 
-Router.route('/plate/state/:id')
-    .post(changeState)
+Router.route('/plates/state/:id')
+    .post(passport.authenticate('jwt', {session:false}),changeState)
 
 module.exports = Router //exporto el modulo

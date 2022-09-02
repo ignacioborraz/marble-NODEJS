@@ -35,7 +35,7 @@ const typeControllers = {
                         if (a.name > b.name) {return 1}
                         if (a.name < b.name) {return -1}
                         return 0
-                      })
+                    })
                     res.status(200).json({
                         response: types,
                         success: true
