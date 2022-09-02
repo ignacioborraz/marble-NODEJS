@@ -3,109 +3,190 @@ const Type= require('../models/Type')
 const typeControllers = {
 
     createType: async(req,res) => {
-        const {name,height,width,thickness,company} = req.body
-        //console.log(req.body)
-        let newType= {}
-        let error = null        
-        try {
-            newType= await new Type({name,height,width,thickness,company}).save()
-            //console.log(newType)
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                await new Type(req.body).save()
+                res.status(201).json({
+                    messagge: 'tipo creado',
+                    success: true
+                })
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : newType,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     getTypes: async(req,res) => {
-        let types = []
-        let error = null
-        try {
-            types = await Type.find()
-                .populate("company", {nameCompany:1})
-            //console.log(types)
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let types = await Type.find()
+                    .populate("company", {nameCompany:1})
+                if (types) {
+                    types = types.sort((a, b) => {
+                        if (a.name > b.name) {return 1}
+                        if (a.name < b.name) {return -1}
+                        return 0
+                      })
+                    res.status(200).json({
+                        response: types,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : types,
-            success: error ? false : true,
-            error: error
-        })
     },
 
-    getOneType: async(id,res) => {
-        let oneType= {}
-        let error = null
-        try {
-            oneType= await Type.findOne({_id:id})
-                .populate("company", {nameCompany:1})
-            return oneType
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
-            res.json({
-                response: 'ERROR',
-                success: false,
-                error: error
+    getOneType: async(req,res) => {
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let type = await Type.findOne({_id:req.params.id})
+                if (type) {
+                    res.status(200).json({
+                        response: type,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
             })
         }
     },
 
     getTypesFromCompany: async(req,res) => {
-        let {id} = req.params
-        let types = []
-        let error = null
-        try {
-            types = await Type.find({company:id})
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        console.log(req.params)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let types = await Type.find({company: req.params.id})
+                console.log(types)
+                if (types) {
+                    types = types.sort((a, b) => {
+                        if (a.name > b.name) {return 1}
+                        if (a.name < b.name) {return -1}
+                        return 0
+                    })
+                    console.log(types)
+                    res.status(200).json({
+                        response: types,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : types,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     putType: async(req,res) => {
-        let {id} = req.params
-        let putType= {}
-        let error = null
-        try {
-            putType= await Type.findOneAndUpdate({_id:id},req.body,{new: true})
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let type = await Type.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
+                if (type) {
+                    res.status(200).json({
+                        messagge: 'tipo modificado',
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : putType,
-            success: error ? false : true,
-            error: error
-        })
     },
 
     deleteType: async(req,res) => {
-        let {id} = req.params
-        let deleteType= {}
-        let error = null
-        try {
-            deleteType= await Type.findOneAndDelete({_id:id})
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let type = await Type.findOneAndDelete({_id:req.params.id})
+                if (type) {
+                    res.status(200).json({
+                        messagge: 'tipo eliminado',
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : deleteType,
-            success: error ? false : true,
-            error: error
-        })
     }
     
 }

@@ -26,98 +26,168 @@ const colorControllers = {
     },
 
     getColors: async(req,res) => {
-        let colors = []
-        try {
-            colors = await Color.find()
-                .populate("company", {nameCompany:1})
-            //console.log(colors)
-            res.status(200).json({
-                response: colors,
-                success: true
-            })
-        } catch(errorDeCatcheo) {
-            console.log(errorDeCatcheo)
-            res.status(400).json({
-                messagge: 'error',
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let colors = await Color.find()
+                    .populate("company", {nameCompany:1})
+                if (colors) {
+                    colors = colors.sort((a, b) => {
+                        if (a.name > b.name) {return 1}
+                        if (a.name < b.name) {return -1}
+                        return 0
+                      })
+                    res.status(200).json({
+                        response: colors,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
                 success: false
             })
         }
     },
 
     getOneColor: async(req,res) => {
-        let color = {}
-        try {
-            color = await Color.findOne({_id:req.params.id})
-            res.status(200).json({
-                response: color,
-                success: true
-            })
-        } catch(errorDeCatcheo) {
-            console.log(errorDeCatcheo)
-            res.status(400).json({
-                messagge: 'error',
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let color = await Color.findOne({_id:req.params.id})
+                if (color) {
+                    res.status(200).json({
+                        response: color,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
                 success: false
             })
         }
     },
 
     getColorsFromCompany: async(req,res) => {
-        let colors = []
-        let query = {company: req.params.id} 
-        if (req.query.color) {
-            //console.log(req.query.color)
-            query.name = new RegExp(req.query.color, 'i')
-            /*
-            la ruta en axios para el filtro es
-            http://localhost:8000/api/marble/colors/:id?color=palo
-            */
-            //console.log(query);
-        }
-        try {
-            colors = await Color.find(query)
-            res.status(200).json({
-                response: colors,
-                success: true
-            })
-        } catch(errorDeCatcheo) {
-            console.log(errorDeCatcheo)
-            res.status(400).json({
-                messagge: 'error',
+        if (req.user.role==='admin'||req.user.role==='user') {
+            let query = {company: req.params.id} 
+            if (req.query.color) {
+                query.name = new RegExp(req.query.color, 'i')
+            }
+            try {
+                let colors = await Color.find(query)
+                if (colors) {
+                    colors = colors.sort((a, b) => {
+                        if (a.name > b.name) {return 1}
+                        if (a.name < b.name) {return -1}
+                        return 0
+                    })
+                    res.status(200).json({
+                        response: colors,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
                 success: false
             })
         }
     },
 
     putColor: async(req,res) => {
-        let {id} = req.params
-        let putColor = {}
-        let error = null
-        try {
-            putColor = await Color.findOneAndUpdate({_id:id},req.body,{new: true})
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let color = await Color.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
+                if (color) {
+                    res.status(200).json({
+                        messagge: 'color modificado',
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : putColor,
-            success: error ? false : true,
-        })
     },
 
     deleteColor: async(req,res) => {
-        let {id} = req.params
-        let deleteColor = {}
-        let error = null
-        try {
-            deleteColor = await Color.findOneAndDelete({_id:id})
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user.role==='admin'||req.user.role==='user') {
+            try {
+                let color = await Color.findOneAndDelete({_id:req.params.id})
+                if (color) {
+                    res.status(200).json({
+                        messagge: 'color eliminado',
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : deleteColor,
-            success: error ? false : true,
-        })
     }
     
 }

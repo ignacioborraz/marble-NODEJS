@@ -38,30 +38,26 @@ Router.route('/company/:id')
 const {createColor,getColors,getOneColor,getColorsFromCompany,putColor,deleteColor} = require('./controllers/colorControllers')
 
 Router.route('/color')
-    .get(getColors)
+    .get(passport.authenticate('jwt', {session:false}),getColors)
     .post(passport.authenticate('jwt', {session:false}),createColor)
-
 Router.route('/colors/:id')
-    .get(getColorsFromCompany)
-
+    .get(passport.authenticate('jwt', {session:false}),getColorsFromCompany)
 Router.route('/color/:id')
-    .get(getOneColor)
-    .put(putColor)
-    .delete(deleteColor)
+    .get(passport.authenticate('jwt', {session:false}),getOneColor)
+    .put(passport.authenticate('jwt', {session:false}),putColor)
+    .delete(passport.authenticate('jwt', {session:false}),deleteColor)
 
 const {createType,getTypes,getOneType,getTypesFromCompany,putType,deleteType} = require('./controllers/typeControllers')
 
 Router.route('/type')
-    .get(getTypes)
-    .post(createType)
-
+    .get(passport.authenticate('jwt', {session:false}),getTypes)
+    .post(passport.authenticate('jwt', {session:false}),createType)
 Router.route('/types/:id')
-    .get(getTypesFromCompany)
-
+    .get(passport.authenticate('jwt', {session:false}),getTypesFromCompany)
 Router.route('/type/:id')
-    .get(getOneType)
-    .put(putType)
-    .delete(deleteType)
+    .get(passport.authenticate('jwt', {session:false}),getOneType)
+    .put(passport.authenticate('jwt', {session:false}),putType)
+    .delete(passport.authenticate('jwt', {session:false}),deleteType)
 
 const {createState,getStates,getOneState,putState,deleteState} = require('./controllers/stateControllers')
 
