@@ -163,25 +163,32 @@ const plateControllers = {
     },
 
     changeState: async(req,res) => {
-        let {id} = req.params
-        let plate = {}
-        let error = null
-        try {
-            plate = await Plate.findOne({lot:id})
-            let newState = await stateControllers.changeState(req.body)
-            console.log(newState)
-            console.log(plate.lot)
-            console.log(plate.state)
-            plate.state.push(newState._id)
-            await plate.save()
-        } catch(errorDeCatcheo) {
-            error='error'
-            console.log(errorDeCatcheo)
+        if (req.user) {
+            let {id} = req.params
+            let plate = {}
+            let error = null
+            try {
+                plate = await Plate.findOne({lot:id})
+                let newState = await stateControllers.changeState(req.body)
+                console.log(newState)
+                console.log(plate.lot)
+                console.log(plate.state)
+                plate.state.push(newState._id)
+                await plate.save()
+            } catch(errorDeCatcheo) {
+                error='error'
+                console.log(errorDeCatcheo)
+            }
+            res.json({
+                response: error ? 'ERROR' : plate,
+                success: error ? false : true,
+            })
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
         }
-        res.json({
-            response: error ? 'ERROR' : plate,
-            success: error ? false : true,
-        })
     },
 
     deletePlate: async(req,res) => {

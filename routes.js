@@ -6,21 +6,16 @@ const {signUp,signIn,signOut,verifyToken,getUsers,getOneUser,putUser,deleteUser}
 
 Router.route('/auth')
     .get(passport.authenticate('jwt', {session:false}),getUsers)
-
 Router.route('/auth/:id')
     .get(passport.authenticate('jwt', {session:false}),getOneUser)
     .put(passport.authenticate('jwt', {session:false}),putUser)
     .delete(passport.authenticate('jwt', {session:false}),deleteUser)
-
 Router.route('/auth/sign/up')
     .post(signUp)
-
 Router.route('/auth/sign/in')
     .post(signIn)
-
 Router.route('/auth/sign/out')
     .post(signOut)
-
 Router.route('/auth/sign/token')
     .get(passport.authenticate('jwt', {session:false}),verifyToken)
 
@@ -29,7 +24,6 @@ const {createCompany,getCompanies,getOneCompany,putCompany,deleteCompany} = requ
 Router.route('/company')
     .get(getCompanies)
     .post(createCompany)
-
 Router.route('/company/:id')
     .get(getOneCompany)
     .put(putCompany)
@@ -84,4 +78,4 @@ Router.route('/plates/:id')
 Router.route('/plates/state/:id')
     .post(passport.authenticate('jwt', {session:false}),changeState)
 
-module.exports = Router //exporto el modulo
+module.exports = Router
