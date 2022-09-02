@@ -19,8 +19,6 @@ const plateControllers = {
                 state.date = Date.now()
                 await state.save()
                 req.body.state = state //actualizo el estado
-                console.log('req body')
-                console.log(req.body)
                 await Plate.create(req.body) //creo la placa
                 res.status(201).json({
                     messagge: 'placa creada',
