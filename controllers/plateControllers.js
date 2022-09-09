@@ -48,12 +48,22 @@ const plateControllers = {
                 console.log(req.query.lot)
             }
             if (req.query.internal) {
-                query.internal = new RegExp(req.query.internal, 'i')
-                console.log(req.query.internal)
+                if (req.query.internal === 'true') {
+                    query.note = null
+                    query.done = false
+                } else {
+                    query.internal = new RegExp(req.query.internal, 'i')
+                    console.log(req.query.internal)
+                }
             }
             if (req.query.note) {
-                query.note = new RegExp(req.query.note, 'i')
-                console.log(req.query.note)
+                if (req.query.note === 'true') {
+                    query.internal = null
+                    query.done = false
+                } else {
+                    query.note = new RegExp(req.query.note, 'i')
+                    console.log(req.query.note)
+                }
             }
             if (req.query.done) {
                 query.done = req.query.done
