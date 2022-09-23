@@ -6,7 +6,7 @@ const schema = new mongoose.Schema ({
     x: {type:Number, required:true}, //alto
     y: {type:Number, required:true}, //ancho
     z: {type:Number, required:true}, //espesor
-    acc: [{type: mongoose.Types.ObjectId , ref:'accesories'}]
+    instalation: {type:String, required:true}
 })
 
 const Jhonson = mongoose.model('jhonsons',schema)
