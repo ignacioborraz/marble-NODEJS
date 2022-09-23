@@ -11,12 +11,14 @@ const plateControllers = {
                 let state = await new State({
                     state: 'nueva',
                     width: type.width,
-                    height: type.height
+                    heightSquare: "",
+                    height: type.height,
+                    widthSquare: ""
                 }) //defino el estado "nuevo"
                 state.date = Date.now()
                 await state.save()
                 req.body.state = state //cargo estado inicial
-                req.body.states = state //que coincide con actual
+                req.body.lastStates = [state] //que coincide con actual
                 await Plate.create(req.body) //creo la placa
                 res.status(201).json({
                     messagge: 'placa creada',
@@ -73,7 +75,6 @@ const plateControllers = {
                     .populate("type",{name:1,width:1,height:1,thickness:1})
                     .populate("color",{name:1,photo:1})
                     .populate("state")
-                    .populate("states")
                     .populate("company",{nameCompany:1})
                 if (plates) {
                     plates = plates.sort((a, b) => {
@@ -110,11 +111,10 @@ const plateControllers = {
     getOnePlate: async(req,res) => {
         if (req.user) {
         try {
-            let plate = await Plate.findOne({_id:req.paramsid})
+            let plate = await Plate.findOne({_id:req.params.id})
                 .populate("type",{name:1})
                 .populate("color",{name:1})
-                .populate("state")
-                .populate("states")
+                .populate("lastStates")
                 .populate("company",{companyName:1})
                 if (plate) {
                     res.status(200).json({
@@ -185,7 +185,6 @@ const plateControllers = {
                     .populate("type",{name:1})
                     .populate("color",{name:1})
                     .populate("state")
-                    .populate("states")
                     .populate("company",{companyName:1})
                 let newState = await new State(req.body)
                 newState.date = await new Date()
@@ -194,17 +193,20 @@ const plateControllers = {
                 console.log(plate.lot)
                 console.log(plate.state)
                 plate.state = newState._id
-                plate.states.push(newState._id)
+                plate.lastStates.push(newState._id)
                 plate.done = req.body.done
                 await plate.save()
+                res.status(400).json({
+                    messagge: 'ok',
+                    success: true
+                })
             } catch(errorDeCatcheo) {
-                error='error'
                 console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
             }
-            res.json({
-                response: error ? 'ERROR' : plate,
-                success: error ? false : true,
-            })
         } else {
             res.status(401).json({
                 messagge: 'no autorizado',
