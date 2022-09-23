@@ -9,6 +9,6 @@ const stateSchema = new mongoose.Schema ({
     widthSquare: {type:Number}, //ancho de escuadra
 })
 
-const Plate = mongoose.model('states',stateSchema)
-module.exports = Plate
+const State = mongoose.model('states',stateSchema)
+module.exports = State
 

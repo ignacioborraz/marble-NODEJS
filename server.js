@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 
 const cors = require('cors')
-const Router = require('./routes')
+const Router = require('./router/index')
 const PORT = process.env.PORT || 4000
 
 app.set('port',PORT)

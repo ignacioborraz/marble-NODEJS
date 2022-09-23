@@ -1,9 +1,6 @@
 const Plate = require('../models/Plate')
 const Type = require('../models/Type')
 const State = require('../models/State')
-const typeControllers = require('./typeControllers')
-const stateControllers = require('./stateControllers')
-const { query } = require('express')
 
 const plateControllers = {
 
@@ -15,10 +12,10 @@ const plateControllers = {
                     state: 'nueva',
                     width: type.width,
                     height: type.height
-                })
+                }) //defino el estado "nuevo"
                 state.date = Date.now()
                 await state.save()
-                req.body.state = state //actualizo el estado
+                req.body.state = state //actualizo el cuerpo
                 await Plate.create(req.body) //creo la placa
                 res.status(201).json({
                     messagge: 'placa creada',
@@ -76,6 +73,49 @@ const plateControllers = {
                     .populate("color",{name:1,photo:1})
                     .populate("state")
                     .populate("company",{nameCompany:1})
+                if (plates) {
+                    plates = plates.sort((a, b) => {
+                        if (a.name > b.name) {return 1}
+                        if (a.name < b.name) {return -1}
+                        return 0
+                    })
+                    res.status(200).json({
+                        response: plates,
+                        success: true
+                    })
+                } else {
+                    res.status(404).json({
+                        messagge: 'no se encontraron coincidencias',
+                        success: true
+                    })
+                }
+            } catch(errorDeCatcheo) {
+                console.log(errorDeCatcheo)
+                res.status(400).json({
+                    messagge: 'error',
+                    success: false
+                })
+            }
+        } else {
+            res.status(401).json({
+                messagge: 'no autorizado',
+                success: false
+            })
+        }
+        
+    },
+
+    getLastStateOfPlates: async(req,res) => {
+        if (req.user) {
+            console.log(req.query.state)
+            try {
+                let plates = await Plate.find()
+                    .populate("type",{name:1,width:1,height:1,thickness:1})
+                    .populate("color",{name:1,photo:1})
+                    .populate({path: 'state', select: 'state -_id'})
+                    .populate("company",{nameCompany:1})
+                //plates.map(plate => plate.state = plate.state[plate.state.length-1])
+                //plates = plates.filter(plate => plate.state === req.query.state)
                 if (plates) {
                     plates = plates.sort((a, b) => {
                         if (a.name > b.name) {return 1}
@@ -173,17 +213,27 @@ const plateControllers = {
     },
 
     changeState: async(req,res) => {
+        console.log(req.user);
+        console.log(req.body);
+        console.log(req.params);
         if (req.user) {
             let {id} = req.params
             let plate = {}
             let error = null
             try {
-                plate = await Plate.findOne({lot:id})
-                let newState = await stateControllers.changeState(req.body)
+                plate = await Plate.findOne({_id:id})
+                    .populate("type",{name:1})
+                    .populate("color",{name:1})
+                    .populate("state")
+                    .populate("company",{companyName:1})
+                let newState = await new State(req.body)
+                newState.date = await new Date()
+                await newState.save()
                 console.log(newState)
                 console.log(plate.lot)
                 console.log(plate.state)
                 plate.state.push(newState._id)
+                plate.done = req.body.done
                 await plate.save()
             } catch(errorDeCatcheo) {
                 error='error'
