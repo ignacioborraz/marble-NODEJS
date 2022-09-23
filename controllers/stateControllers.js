@@ -51,7 +51,7 @@ const stateControllers = {
         let newState = {}
         let error = null
         try {
-            newState = await new State(req)
+            newState = await new State(req.body)
             newState.date = date
             await newState.save()
             return newState
