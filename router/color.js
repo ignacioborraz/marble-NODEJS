@@ -10,7 +10,7 @@ router.route('/')
     .get(passport.authenticate('jwt', {session:false}),getColors)
     .post(passport.authenticate('jwt', {session:false}),createColor)
 
-router.route('cia/:id')
+router.route('/cia/:id')
     .get(passport.authenticate('jwt', {session:false}),getColorsFromCompany)
 
 router.route('/:id')
