@@ -25,11 +25,31 @@ const controller = {
         }
     },
 
-    get: async(req,res) => {
+    get: async(req,res) => {        
         if (req.user) {
+            let query ={}
+            if (req.query.internal) {
+                if (req.query.internal === 'true') {
+                    query.note = null
+                    query.done = false
+                } else {
+                    query.internal = new RegExp(req.query.internal, 'i')
+                }
+            }
+            if (req.query.note) {
+                if (req.query.note === 'true') {
+                    query.internal = null
+                    query.done = false
+                } else {
+                    query.note = new RegExp(req.query.note, 'i')
+                }
+            }
+            if (req.query.done) {
+                query.done = req.query.done
+            }
             try {
-                let sinks = await Sink.find().sort({code: 'asc'})
-                    .populate("jhonsons")
+                let sinks = await Sink.find(query).sort({code: 'asc'})
+                    .populate("jhonson")
                     .populate("accesories")
                 if (sinks) {
                     res.status(200).json({
@@ -61,7 +81,7 @@ const controller = {
         if (req.user) {
             try {
                 let sink = await Sink.findOne({_id:req.params.id})
-                    .populate("jhonsons")
+                    .populate("jhonson")
                     .populate("accesories")
                 if (sink) {
                     res.status(200).json({
