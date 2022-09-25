@@ -1,5 +1,5 @@
 require('dotenv').config()
-const db = require('../../config/database')
+const db = require('../database')
 const Color = require('../../models/Color')
 
 let colors = [
