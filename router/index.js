@@ -8,6 +8,7 @@ const stateRouter = require('./state')
 const plateRouter = require('./plate')
 const accesoryRouter = require('./accesory')
 const jhonsonRouter = require('./jhonson')
+const sinkRouter = require('./sink')
 
 router.use('/auth',authRouter)
 router.use('/company',companyRouter)
@@ -17,5 +18,6 @@ router.use('/state',stateRouter)
 router.use('/plate',plateRouter)
 router.use('/accesory',accesoryRouter)
 router.use('/jhonson',jhonsonRouter)
+router.use('/sink',sinkRouter)
 
 module.exports = router
