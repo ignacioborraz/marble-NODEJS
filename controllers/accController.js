@@ -27,8 +27,12 @@ const controller = {
 
     get: async(req,res) => {
         if (req.user) {
+            let query ={}
+            if (req.query.code) {
+                query.code = new RegExp(req.query.code, 'i')
+            }
             try {
-                let accs = await Acc.find().sort({code: 'asc'})
+                let accs = await Acc.find(query).sort({code: 'asc'})
                 if (accs) {
                     res.status(200).json({
                         response: accs,

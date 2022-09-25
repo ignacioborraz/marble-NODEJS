@@ -27,8 +27,15 @@ const controller = {
 
     get: async(req,res) => {
         if (req.user) {
+            let query ={}
+            if (req.query.code) {
+                query.code = new RegExp(req.query.code, 'i')
+            }
+            if (req.query.type) {
+                query.type = new RegExp(req.query.type, 'i')
+            }
             try {
-                let jhonsons = await Jhonson.find().sort({code: 'asc'})
+                let jhonsons = await Jhonson.find(query).sort({code: 'asc'})
                 if (jhonsons) {
                     res.status(200).json({
                         response: jhonsons,
