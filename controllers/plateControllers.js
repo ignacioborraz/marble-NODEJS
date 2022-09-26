@@ -116,7 +116,7 @@ const plateControllers = {
                 .populate("color")
                 .populate("state")
                 .populate("lastStates")
-                .populate("company",{companyName:1})
+                .populate("company")
                 if (plate) {
                     res.status(200).json({
                         response: plate,
