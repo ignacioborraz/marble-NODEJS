@@ -114,6 +114,7 @@ const plateControllers = {
             let plate = await Plate.findOne({_id:req.params.id})
                 .populate("type")
                 .populate("color")
+                .populate("state")
                 .populate("lastStates")
                 .populate("company",{companyName:1})
                 if (plate) {
