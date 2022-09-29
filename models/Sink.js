@@ -6,7 +6,7 @@ const schema = new mongoose.Schema ({
     jhonson: {type: mongoose.Types.ObjectId , ref:'jhonsons'},
     accesories: [{type: mongoose.Types.ObjectId , ref:'accesories'}],
     done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
-    instalation: {type:String},
+    instalation: [{type:String}],
     comments: {type:String}
 })
 
