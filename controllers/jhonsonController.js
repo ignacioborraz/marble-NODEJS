@@ -35,7 +35,7 @@ const controller = {
                 query.type = new RegExp(req.query.type, 'i')
             }
             try {
-                let jhonsons = await Jhonson.find(query).sort({code: 'asc'})
+                let jhonsons = await Jhonson.find(query).sort({order: 'asc'})
                 if (jhonsons) {
                     res.status(200).json({
                         response: jhonsons,

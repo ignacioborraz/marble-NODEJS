@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema ({
+    order: {type:Number, required:true},
     code: {type:String, required:true}, //codigo según catalogo
     type: {type:String, required:true}, //tipo de acero
     photo: {type:String, required:true},
