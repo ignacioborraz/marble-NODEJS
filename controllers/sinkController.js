@@ -4,6 +4,7 @@ const controller = {
 
     create: async(req,res) => {
         if (req.user) {
+            req.body.user = req.user.id
             try {
                 await new Sink(req.body).save()
                 res.status(201).json({

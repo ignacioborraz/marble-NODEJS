@@ -6,6 +6,7 @@ const plateControllers = {
 
     createPlate: async(req,res) => {
         if (req.user) {
+            req.body.user = req.user.id
             try {
                 let type = await Type.findOne({_id:req.body.type}) //busco el tipo
                 let state = await new State({
@@ -13,7 +14,8 @@ const plateControllers = {
                     width: type.width,
                     heightSquare: "",
                     height: type.height,
-                    widthSquare: ""
+                    widthSquare: "",
+                    user: req.user.id
                 }) //defino el estado "nuevo"
                 state.date = Date.now()
                 await state.save()
@@ -75,6 +77,8 @@ const plateControllers = {
                     .populate("type",{name:1,width:1,height:1,thickness:1})
                     .populate("color",{name:1,photo:1})
                     .populate("state")
+                    .populate("lastStates")
+                    .populate("user",{nick:1})
                     .populate("company",{nameCompany:1})
                 if (plates) {
                     plates = plates.sort((a, b) => {
@@ -116,7 +120,8 @@ const plateControllers = {
                 .populate("color")
                 .populate("state")
                 .populate("lastStates")
-                .populate("company")
+                .populate("user",{nick:1})
+                .populate("company",{nameCompany:1})
                 if (plate) {
                     res.status(200).json({
                         response: plate,
@@ -186,10 +191,11 @@ const plateControllers = {
                     .populate("type",{name:1})
                     .populate("color",{name:1})
                     .populate("state")
+                    .populate("lastStates")
+                    .populate("user",{nick:1})
                     .populate("company",{companyName:1})
-                let newState = await new State(req.body)
-                newState.date = await new Date()
-                await newState.save()
+                req.body.user = req.user.id
+                let newState = await new State(req.body).save()
                 console.log(newState)
                 console.log(plate.lot)
                 console.log(plate.state)

@@ -7,6 +7,7 @@ const stateSchema = new mongoose.Schema ({
     heightSquare: {type:Number}, //alto de escuadra
     width: {type:Number, required:true}, //ancho
     widthSquare: {type:Number}, //ancho de escuadra
+    user: {type: mongoose.Types.ObjectId , ref:'users'}
 })
 
 const State = mongoose.model('states',stateSchema)

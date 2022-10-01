@@ -7,7 +7,8 @@ const schema = new mongoose.Schema ({
     accesories: [{type: mongoose.Types.ObjectId , ref:'accesories'}],
     done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
     instalation: [{type:String}],
-    comments: {type:String}
+    comments: {type:String},
+    user: {type: mongoose.Types.ObjectId , ref:'users'}
 })
 
 const Sink = mongoose.model('sinks',schema)

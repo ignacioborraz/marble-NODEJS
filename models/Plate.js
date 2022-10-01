@@ -10,7 +10,8 @@ const plateSchema = new mongoose.Schema ({
     lastStates: [{type: mongoose.Types.ObjectId , ref:'states', required:true}], //todos los estados
     company: {type: mongoose.Types.ObjectId , ref:'companies', required:true},
     done: {type:Boolean, required:true}, //las placas gastadas al 100% pasan de false a true
-    comments: {type:String}
+    comments: {type:String},
+    user: {type: mongoose.Types.ObjectId , ref:'users'}
 })
 
 const Plate = mongoose.model('plates',plateSchema)
