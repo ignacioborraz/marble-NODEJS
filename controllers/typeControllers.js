@@ -1,9 +1,9 @@
 const Type= require('../models/Type')
 
-const typeControllers = {
+const controller = {
 
-    createType: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+    create: async(req,res) => {
+        if (req.user) {
             try {
                 await new Type(req.body).save()
                 res.status(201).json({
@@ -25,17 +25,16 @@ const typeControllers = {
         }
     },
 
-    getTypes: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+    get: async(req,res) => {
+        if (req.user) {
+            let query = {}
+            if (req.query.cia) {
+                query.company = req.query.cia
+            }
             try {
-                let types = await Type.find()
+                let types = await Type.find(query).sort('asc')
                     .populate("company", {nameCompany:1})
                 if (types) {
-                    types = types.sort((a, b) => {
-                        if (a.name > b.name) {return 1}
-                        if (a.name < b.name) {return -1}
-                        return 0
-                    })
                     res.status(200).json({
                         response: types,
                         success: true
@@ -61,10 +60,11 @@ const typeControllers = {
         }
     },
 
-    getOneType: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+    one: async(req,res) => {
+        if (req.user) {
             try {
                 let type = await Type.findOne({_id:req.params.id})
+                    .populate("company", {nameCompany:1})
                 if (type) {
                     res.status(200).json({
                         response: type,
@@ -91,46 +91,8 @@ const typeControllers = {
         }
     },
 
-    getTypesFromCompany: async(req,res) => {
-        console.log(req.params)
-        if (req.user.role==='admin'||req.user.role==='user') {
-            try {
-                let types = await Type.find({company: req.params.id})
-                console.log(types)
-                if (types) {
-                    types = types.sort((a, b) => {
-                        if (a.name > b.name) {return 1}
-                        if (a.name < b.name) {return -1}
-                        return 0
-                    })
-                    console.log(types)
-                    res.status(200).json({
-                        response: types,
-                        success: true
-                    })
-                } else {
-                    res.status(404).json({
-                        messagge: 'no se encontraron coincidencias',
-                        success: true
-                    })
-                }
-            } catch(errorDeCatcheo) {
-                console.log(errorDeCatcheo)
-                res.status(400).json({
-                    messagge: 'error',
-                    success: false
-                })
-            }
-        } else {
-            res.status(401).json({
-                messagge: 'no autorizado',
-                success: false
-            })
-        }
-    },
-
-    putType: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+    put: async(req,res) => {
+        if (req.user) {
             try {
                 let type = await Type.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
                 if (type) {
@@ -159,8 +121,8 @@ const typeControllers = {
         }
     },
 
-    deleteType: async(req,res) => {
-        if (req.user.role==='admin'||req.user.role==='user') {
+    destroy: async(req,res) => {
+        if (req.user) {
             try {
                 let type = await Type.findOneAndDelete({_id:req.params.id})
                 if (type) {
@@ -191,4 +153,4 @@ const typeControllers = {
     
 }
 
-module.exports = typeControllers
+module.exports = controller

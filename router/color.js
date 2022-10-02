@@ -3,19 +3,16 @@ const router = require('express').Router()
 const passport = require('../config/passport')
 
 const {
-    createColor,getColors,getOneColor,getColorsFromCompany,putColor,deleteColor
+    create,get,one,put,destroy
 } = require('../controllers/colorControllers')
 
 router.route('/')
-    .get(passport.authenticate('jwt', {session:false}),getColors)
-    .post(passport.authenticate('jwt', {session:false}),createColor)
-
-router.route('/cia/:id')
-    .get(passport.authenticate('jwt', {session:false}),getColorsFromCompany)
+    .get(passport.authenticate('jwt', {session:false}),get)
+    .post(passport.authenticate('jwt', {session:false}),create)
 
 router.route('/:id')
-    .get(passport.authenticate('jwt', {session:false}),getOneColor)
-    .put(passport.authenticate('jwt', {session:false}),putColor)
-    .delete(passport.authenticate('jwt', {session:false}),deleteColor)
+    .get(passport.authenticate('jwt', {session:false}),one)
+    .put(passport.authenticate('jwt', {session:false}),put)
+    .delete(passport.authenticate('jwt', {session:false}),destroy)
 
 module.exports = router

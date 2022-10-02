@@ -1,21 +1,18 @@
-const Router = require('express').Router()
+const router = require('express').Router()
 //const validator = require('./config/validator')
 const passport = require('../config/passport')
 
 const {
-    createType,getTypes,getOneType,getTypesFromCompany,putType,deleteType
+    create,get,one,put,destroy
 } = require('../controllers/typeControllers')
 
-Router.route('/')
-    .get(passport.authenticate('jwt', {session:false}),getTypes)
-    .post(passport.authenticate('jwt', {session:false}),createType)
+router.route('/')
+    .get(passport.authenticate('jwt', {session:false}),get)
+    .post(passport.authenticate('jwt', {session:false}),create)
 
-Router.route('/cia/:id')
-    .get(passport.authenticate('jwt', {session:false}),getTypesFromCompany)
+router.route('/:id')
+    .get(passport.authenticate('jwt', {session:false}),one)
+    .put(passport.authenticate('jwt', {session:false}),put)
+    .delete(passport.authenticate('jwt', {session:false}),destroy)
 
-Router.route('/:id')
-    .get(passport.authenticate('jwt', {session:false}),getOneType)
-    .put(passport.authenticate('jwt', {session:false}),putType)
-    .delete(passport.authenticate('jwt', {session:false}),deleteType)
-
-module.exports = Router
+module.exports = router

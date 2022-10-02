@@ -1,8 +1,8 @@
 const Color = require('../models/Color')
 
-const colorControllers = {
+const controller = {
 
-    createColor: async(req,res) => {
+    create: async(req,res) => {
         if (req.user) {
             try {
                 await new Color(req.body).save()
@@ -25,7 +25,7 @@ const colorControllers = {
         }
     },
 
-    getColors: async(req,res) => {
+    get: async(req,res) => {
         if (req.user) {
             let query = {}
             if (req.query.cia) {
@@ -35,14 +35,9 @@ const colorControllers = {
                 query.name = new RegExp(req.query.name, 'i')
             }
             try {
-                let colors = await Color.find(query)
+                let colors = await Color.find(query).sort('asc')
                     .populate("company", {nameCompany:1})
                 if (colors) {
-                    colors = colors.sort((a, b) => {
-                        if (a.name > b.name) {return 1}
-                        if (a.name < b.name) {return -1}
-                        return 0
-                    })
                     res.status(200).json({
                         response: colors,
                         success: true
@@ -68,10 +63,11 @@ const colorControllers = {
         }
     },
 
-    getOneColor: async(req,res) => {
+    one: async(req,res) => {
         if (req.user) {
             try {
                 let color = await Color.findOne({_id:req.params.id})
+                    .populate("company", {nameCompany:1})
                 if (color) {
                     res.status(200).json({
                         response: color,
@@ -98,46 +94,7 @@ const colorControllers = {
         }
     },
 
-    getColorsFromCompany: async(req,res) => {
-        if (req.user) {
-            let query = {company: req.params.id} 
-            if (req.query.color) {
-                query.name = new RegExp(req.query.color, 'i')
-            }
-            try {
-                let colors = await Color.find(query)
-                if (colors) {
-                    colors = colors.sort((a, b) => {
-                        if (a.name > b.name) {return 1}
-                        if (a.name < b.name) {return -1}
-                        return 0
-                    })
-                    res.status(200).json({
-                        response: colors,
-                        success: true
-                    })
-                } else {
-                    res.status(404).json({
-                        messagge: 'no se encontraron coincidencias',
-                        success: true
-                    })
-                }
-            } catch(errorDeCatcheo) {
-                console.log(errorDeCatcheo)
-                res.status(400).json({
-                    messagge: 'error',
-                    success: false
-                })
-            }
-        } else {
-            res.status(401).json({
-                messagge: 'no autorizado',
-                success: false
-            })
-        }
-    },
-
-    putColor: async(req,res) => {
+    put: async(req,res) => {
         if (req.user) {
             try {
                 let color = await Color.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
@@ -167,7 +124,7 @@ const colorControllers = {
         }
     },
 
-    deleteColor: async(req,res) => {
+    destroy: async(req,res) => {
         if (req.user) {
             try {
                 let color = await Color.findOneAndDelete({_id:req.params.id})
@@ -199,4 +156,4 @@ const colorControllers = {
     
 }
 
-module.exports = colorControllers
+module.exports = controller
