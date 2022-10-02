@@ -32,7 +32,7 @@ const controller = {
                 query.company = req.query.cia
             }
             try {
-                let types = await Type.find(query).sort('asc')
+                let types = await Type.find(query).sort({name:'asc'})
                     .populate("company", {nameCompany:1})
                 if (types) {
                     res.status(200).json({

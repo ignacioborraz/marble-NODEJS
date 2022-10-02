@@ -35,7 +35,7 @@ const controller = {
                 query.name = new RegExp(req.query.name, 'i')
             }
             try {
-                let colors = await Color.find(query).sort('asc')
+                let colors = await Color.find(query).sort({name:'asc'})
                     .populate("company", {nameCompany:1})
                 if (colors) {
                     res.status(200).json({
