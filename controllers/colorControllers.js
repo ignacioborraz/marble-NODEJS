@@ -27,8 +27,16 @@ const colorControllers = {
 
     getColors: async(req,res) => {
         if (req.user) {
+            let query = {}
+            console.log(req.query)
+            if (req.query.cia) {
+                query.company = req.query.cia
+            }
+            if (req.query.name) {
+                query.name = new RegExp(req.query.name, 'i')
+            }
             try {
-                let colors = await Color.find()
+                let colors = await Color.find(query)
                     .populate("company", {nameCompany:1})
                 if (colors) {
                     colors = colors.sort((a, b) => {
