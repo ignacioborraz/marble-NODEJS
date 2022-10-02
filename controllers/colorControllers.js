@@ -28,7 +28,6 @@ const colorControllers = {
     getColors: async(req,res) => {
         if (req.user) {
             let query = {}
-            console.log(req.query)
             if (req.query.cia) {
                 query.company = req.query.cia
             }
