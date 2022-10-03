@@ -1,4 +1,4 @@
-const Sink = require('../models/Sink')
+const Stock = require('../models/Stock')
 
 const controller = {
 
@@ -6,9 +6,9 @@ const controller = {
         if (req.user) {
             req.body.user = req.user.id
             try {
-                await new Sink(req.body).save()
+                await new Stock(req.body).save()
                 res.status(201).json({
-                    messagge: 'pileta creada',
+                    messagge: 'ok',
                     success: true
                 })
             } catch(errorDeCatcheo) {
@@ -28,13 +28,32 @@ const controller = {
 
     get: async(req,res) => {        
         if (req.user) {
+            let query ={}
+            if (req.query.internal) {
+                if (req.query.internal === 'true') {
+                    query.note = null
+                    query.done = false
+                } else {
+                    query.internal = new RegExp(req.query.internal, 'i')
+                }
+            }
+            if (req.query.note) {
+                if (req.query.note === 'true') {
+                    query.internal = null
+                    query.done = false
+                } else {
+                    query.note = new RegExp(req.query.note, 'i')
+                }
+            }
+            if (req.query.done) {
+                query.done = req.query.done
+            }
             try {
-                let sinks = await Sink.find().sort({code: 'asc'})
-                    .populate("jhonson")
-                    .populate("accesories")
-                if (sinks) {
+                let stocks = await Stock.find(query).sort({code: 'asc'})
+                    .populate("sink")
+                if (stocks) {
                     res.status(200).json({
-                        response: sinks,
+                        response: stocks,
                         success: true
                     })
                 } else {
@@ -61,12 +80,11 @@ const controller = {
     one: async(req,res) => {
         if (req.user) {
             try {
-                let sink = await Sink.findOne({_id:req.params.id})
-                    .populate("jhonson")
-                    .populate("accesories")
-                if (sink) {
+                let stock = await Stock.findOne({_id:req.params.id})
+                    .populate("sink")
+                if (stock) {
                     res.status(200).json({
-                        response: sink,
+                        response: stock,
                         success: true
                     })
                 } else {
@@ -93,10 +111,10 @@ const controller = {
     put: async(req,res) => {
         if (req.user) {
             try {
-                let sink = await Sink.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
-                if (sink) {
+                let stock = await Stock.findOneAndUpdate({_id:req.params.id},req.body,{new: true})
+                if (stock) {
                     res.status(200).json({
-                        messagge: 'pileta modificada',
+                        messagge: 'pedido modificado',
                         success: true
                     })
                 } else {
@@ -123,10 +141,10 @@ const controller = {
     destroy: async(req,res) => {
         if (req.user) {
             try {
-                let sink = await Sink.findOneAndDelete({_id:req.params.id})
-                if (sink) {
+                let stock = await Stock.findOneAndDelete({_id:req.params.id})
+                if (stock) {
                     res.status(200).json({
-                        messagge: 'pileta eliminada',
+                        messagge: 'pedido eliminado',
                         success: true
                     })
                 } else {
