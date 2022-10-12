@@ -6,9 +6,10 @@ const controller = {
         if (req.user) {
             req.body.user = req.user.id
             try {
-                await new Sink(req.body).save()
+                let sinkNew = await new Sink(req.body).save()
                 res.status(201).json({
                     messagge: 'pileta creada',
+                    response: sinkNew,
                     success: true
                 })
             } catch(errorDeCatcheo) {

@@ -5,7 +5,6 @@ const Stock = require('../../models/Stock')
 
 let stock = [
     {
-        _id: "633adaa3f9c1108a081fbab1",
         quantity: 1,
         jhonson: {
             _id: "6335e180f0233f5b111be55f",
@@ -36,7 +35,6 @@ let stock = [
         comments: "DIKA"
     },
     {
-        _id: "633adae4f9c1108a081fbac2",
         internal: null,
         note: "2077",
         quantity: 1,
@@ -62,7 +60,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633adf2af9c1108a081fbacd",
         internal: null,
         note: "2063",
         quantity: 1,
@@ -93,7 +90,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633adf69f9c1108a081fbade",
         internal: null,
         note: "2025",
         quantity: 1,
@@ -119,7 +115,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633ae3bef9c1108a081fbaef",
         internal: null,
         note: "1938",
         quantity: 1,
@@ -145,7 +140,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633ae46cf9c1108a081fbb00",
         internal: null,
         note: "1886",
         quantity: 1,
@@ -175,7 +169,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633ae485f9c1108a081fbb0b",
         internal: null,
         note: "1816",
         quantity: 1,
@@ -206,7 +199,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633ae4baf9c1108a081fbb18",
         internal: null,
         note: "1770",
         quantity: 1,
@@ -232,7 +224,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633aebdef9c1108a081fbb23",
         internal: null,
         note: "1711",
         quantity: 1,
@@ -262,7 +253,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633aebf9f9c1108a081fbb2e",
         internal: null,
         note: "1711",
         quantity: 1,
@@ -292,7 +282,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633aec30f9c1108a081fbb39",
         internal: null,
         note: "1481",
         quantity: 1,
@@ -323,7 +312,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633aec5bf9c1108a081fbb48",
         internal: null,
         note: "1030",
         quantity: 1,
@@ -349,7 +337,6 @@ let stock = [
         __v: 0
     },
     {
-        _id: "633aee19f9c1108a081fbb6a",
         internal: "01",
         note: null,
         quantity: 1,
