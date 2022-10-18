@@ -50,7 +50,9 @@ const controller = {
             }
             try {
                 let stocks = await Stock.find(query).sort({code: 'asc'})
-                    .populate("sink")
+                    .populate("user", {nick: 1})    
+                    .populate({path: "sink", populate: { path: 'jhonson' }})
+                    .populate({path: "sink", populate: { path: 'accesories' }})
                 if (stocks) {
                     res.status(200).json({
                         response: stocks,
