@@ -47,7 +47,7 @@ const plateControllers = {
             let query ={}
             if (req.query.lot) {
                 query.lot = new RegExp(req.query.lot, 'i')
-                console.log(req.query.lot)
+                //console.log(req.query.lot)
             }
             if (req.query.internal) {
                 if (req.query.internal === 'true') {
@@ -55,7 +55,7 @@ const plateControllers = {
                     query.done = false
                 } else {
                     query.internal = new RegExp(req.query.internal, 'i')
-                    console.log(req.query.internal)
+                    //console.log(req.query.internal)
                 }
             }
             if (req.query.note) {
@@ -64,21 +64,21 @@ const plateControllers = {
                     query.done = false
                 } else {
                     query.note = new RegExp(req.query.note, 'i')
-                    console.log(req.query.note)
+                    //console.log(req.query.note)
                 }
             }
             if (req.query.done) {
                 query.done = req.query.done
-                console.log(req.query.done)
+                //console.log(req.query.done)
             }
-            console.log(query)
+            //console.log(query)
             try {
                 let plates = await Plate.find(query)
                     .populate("type",{name:1,width:1,height:1,thickness:1})
                     .populate("color",{name:1,photo:1})
                     .populate("state")
                     .populate("lastStates")
-                    .populate("user",{nick:1})
+                    //.populate("user",{nick:1})
                     .populate("company",{nameCompany:1})
                 if (plates) {
                     plates = plates.sort((a, b) => {
