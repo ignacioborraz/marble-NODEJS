@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema ({
-    sink: [{type: mongoose.Types.ObjectId , ref:'sinks', required:true}],
-    internal: {type:String}, //cod interno de la placa
-    note: {type:String}, //si está vendida, el cod se cambia por el n° de la nota de pedido
+    plates: [{type: mongoose.Types.ObjectId , ref:'plates'}],
+    sinks: [{type: mongoose.Types.ObjectId , ref:'sinks'}]
 })
 
 const Stock = mongoose.model('stocks',schema)

@@ -3,10 +3,7 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema ({
     internal: {type:String}, //cod interno de la placa
     note: {type:String}, //si está vendida, el cod se cambia por el n° de la nota de pedido
-    plates: [{type: mongoose.Types.ObjectId , ref:'plates'}],
-    stocks: [{type: mongoose.Types.ObjectId , ref:'stocks'}],    
-    done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
-    comments: {type:String},
+    stock: [{type: mongoose.Types.ObjectId , ref:'stocks'}],
     user: {type: mongoose.Types.ObjectId , ref:'users'}
 })
 

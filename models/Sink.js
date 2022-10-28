@@ -5,6 +5,7 @@ const schema = new mongoose.Schema ({
     accesories: [{type: mongoose.Types.ObjectId , ref:'accesories'}],
     quantity: {type:Number},
     instalation: [{type:String}],
+    done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
     user: {type: mongoose.Types.ObjectId , ref:'users'}
 })
 
