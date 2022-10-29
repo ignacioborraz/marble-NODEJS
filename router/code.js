@@ -3,11 +3,11 @@ const router = require('express').Router()
 const passport = require('../config/passport')
 
 const {
-    create,get,one,put,destroy
+    create,all,one,put,destroy
 } = require('../controllers/codeController')
 
 router.route('/')
-    .get(passport.authenticate('jwt', {session:false}),get)
+    .get(passport.authenticate('jwt', {session:false}),all)
     .post(passport.authenticate('jwt', {session:false}),create)
 
 router.route('/:id')
