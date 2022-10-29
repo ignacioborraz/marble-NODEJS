@@ -11,8 +11,8 @@ const controller = {
                 messagge: 'ok',
                 success: true
             })
-        } catch(errorDeCatcheo) {
-            next(errorDeCatcheo)
+        } catch(error) {
+            next(error)
         }
     },
 
@@ -59,8 +59,8 @@ const controller = {
                     success: true
                 })
             }
-        } catch(errorDeCatcheo) {
-            next(errorDeCatcheo)
+        } catch(error) {
+            next(error)
         }
     },
 
@@ -88,16 +88,16 @@ const controller = {
                     success: true
                 })
             }
-        } catch(errorDeCatcheo) {
-            next(errorDeCatcheo)
+        } catch(error) {
+            next(error)
         }
     },
 
     put: async(req,res,next) => {
         let {id} = req.params
         try {
-            let stock = await Code.findOneAndUpdate({_id:id},req.body,{new: true})
-            if (stock) {
+            let code = await Code.findOneAndUpdate({_id:id},req.body,{new: true})
+            if (code) {
                 res.status(200).json({
                     messagge: 'codigo modificado',
                     success: true
@@ -108,16 +108,16 @@ const controller = {
                     success: true
                 })
             }
-        } catch(errorDeCatcheo) {
-            next(errorDeCatcheo)
+        } catch(error) {
+            next(error)
         }
     },
 
     destroy: async(req,res) => {
         let {id} = req.params
         try {
-            let stock = await Code.findOneAndDelete({_id:id})
-            if (stock) {
+            let code = await Code.findOneAndDelete({_id:id})
+            if (code) {
                 res.status(200).json({
                     messagge: 'codigo eliminado',
                     success: true
@@ -128,8 +128,8 @@ const controller = {
                     success: true
                 })
             }
-        } catch(errorDeCatcheo) {
-            next(errorDeCatcheo)
+        } catch(error) {
+            next(error)
         }
     }
     

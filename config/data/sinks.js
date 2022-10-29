@@ -1,7 +1,8 @@
 require('dotenv').config()
-const db = require('../database')
+require('../database')
 const Sink = require('../../models/Sink')
 const Stock = require('../../models/Stock')
+const Code = require('../../models/Code')
 
 let stock = [
     {
@@ -53,7 +54,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Gabriela Ende",
         user: "631666a420381a9634e219b9",
@@ -108,7 +109,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Olga",
         user: "631666a420381a9634e219b9",
@@ -133,7 +134,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Federico Navarro",
         user: "631666a420381a9634e219b9",
@@ -162,7 +163,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "German Steel",
         user: "631666a420381a9634e219b9",
@@ -217,7 +218,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Virgia Corpus",
         user: "631666a420381a9634e219b9",
@@ -246,7 +247,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Laura Sanchez",
         user: "631666a420381a9634e219b9",
@@ -275,7 +276,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Laura Sanchez - tiene dos",
         user: "631666a420381a9634e219b9",
@@ -330,7 +331,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "Agustina Norman",
         user: "631666a420381a9634e219b9",
@@ -359,7 +360,7 @@ let stock = [
         accesories: [],
         done: false,
         instalation: [
-            "instalacion lateral"
+            "instalacion de abajo"
         ],
         comments: "stock interno, vender como pil de segunda",
         user: "631666a420381a9634e219b9",
@@ -371,16 +372,20 @@ stock.forEach(async stock => {
     let sink = await Sink.create({
         jhonson: stock.jhonson._id,
         accesories: [],
-        quantity: 1,
         instalation: stock.instalation,
+        done: false,
         user: stock.user
     })
-    Stock.create({
-        sink: sink._id,
+    let newStock = await Stock.create({
+        stock: 1,
+        sink: sink._id
+    })
+    Code.create({
         internal: stock.internal,
         note: stock.note,
-        done: stock.done,
+        stock: [newStock._id],
+        user: stock.user,
         comments: stock.comments,
-        user: stock.user
+        done: false
     })
 })

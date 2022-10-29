@@ -3,17 +3,17 @@ const router = require('express').Router()
 const passport = require('../config/passport')
 
 const {
-    createPlate,getPlates,getOnePlate,putPlate,changeState,deletePlate
+    create,all,one,put,changeState,destroy
 } = require('../controllers/plateControllers')
 
 router.route('/')
-    .get(passport.authenticate('jwt', {session:false}),getPlates)
-    .post(passport.authenticate('jwt', {session:false}),createPlate)
+    .get(passport.authenticate('jwt', {session:false}),all)
+    .post(passport.authenticate('jwt', {session:false}),create)
 
 router.route('/:id')
-    .get(passport.authenticate('jwt', {session:false}),getOnePlate)
-    .put(passport.authenticate('jwt', {session:false}),putPlate)
-    .delete(passport.authenticate('jwt', {session:false}),deletePlate)
+    .get(passport.authenticate('jwt', {session:false}),one)
+    .put(passport.authenticate('jwt', {session:false}),put)
+    .delete(passport.authenticate('jwt', {session:false}),destroy)
 
 router.route('/change/:id')
     .post(passport.authenticate('jwt', {session:false}),changeState)
