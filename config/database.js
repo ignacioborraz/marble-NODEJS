@@ -1,8 +1,17 @@
 const mongoose = require('mongoose')
 
-mongoose.connect(process.env.CONECTION_MONGODB,{
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-})
-.then(()=>console.log('DATABASE CONNECTED'))
-.catch(err => console.error(err))
+let dbConection = async () => {
+    try {
+        await mongoose.connect(
+            process.env.CONECTION_MONGODB,{
+                useUnifiedTopology: true,
+                useNewUrlParser: true,
+            }
+        )
+        console.log('DATABASE CONNECTED')
+    } catch {
+        console.log(error.message)
+    }
+}
+
+dbConection()
