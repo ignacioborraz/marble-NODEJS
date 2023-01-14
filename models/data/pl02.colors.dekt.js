@@ -1,8 +1,4 @@
-require('dotenv').config()
-const db = require('../database')
-const Color = require('../../models/Color')
-
-let colors = [
+module.exports = [
     {
         name: "Alden (M)",
         photo: "https://firebasestorage.googleapis.com/v0/b/portaro-edc21.appspot.com/o/placas%2Fdek%2Faldem.jpg?alt=media&token=327b4fe0-c655-4bb1-b51b-509aea974987",
@@ -184,11 +180,3 @@ let colors = [
         company: "62e5fe59e3ef843cb2fd1a46"
     }
 ]
-
-colors.forEach(color => {
-    Color.create({
-        name: color.name,
-        photo: color.photo,
-        company: color.company
-    })
-})

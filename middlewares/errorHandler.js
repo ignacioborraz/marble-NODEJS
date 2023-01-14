@@ -1,8 +1,9 @@
-let errorHandler = (error,_req,res,_next) => {
-    res.status(500).json({
-        success: false,
-        error: error.message
-    })
+module.exports = (error, req, res, next) => {
+	console.error(error.stack)
+	return res.status(500).json({
+		success: false,
+		method: req.method,
+        path: req.url,
+		response: error.message
+	})
 }
-
-module.exports = errorHandler
