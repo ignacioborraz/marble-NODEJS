@@ -7,8 +7,11 @@ const controller = {
         try {
             let code = await new Code(req.body).save()
             res.status(201).json({
-                id: code._id,
-                messagge: 'ok',
+                response: {
+                    id: code._id,
+                    internal: code.internal || null,
+                    note: code.note || null
+                },
                 success: true
             })
         } catch(error) {

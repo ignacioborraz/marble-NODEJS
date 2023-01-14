@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
 
-const companySchema = new mongoose.Schema ({
+const schema = new mongoose.Schema ({
     nameCompany: {type:String, required:true},
     logoCompany: {type:String, required:true},
     detailCompany: {type:String, required:true}
+},{
+    timestamps: true
 })
 
-const Company = mongoose.model('companies',companySchema)
+const Company = mongoose.model('companies',schema)
 module.exports = Company
-
