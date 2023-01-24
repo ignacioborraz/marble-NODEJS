@@ -6,6 +6,8 @@ const schema = new mongoose.Schema ({
     instalation: [{type:String}],
     done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
     user: {type: mongoose.Types.ObjectId , ref:'users'}
+},{
+    versionKey: false
 })
 
 const Sink = mongoose.model('sinks',schema)

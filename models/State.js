@@ -9,6 +9,8 @@ const schema = new mongoose.Schema ({
     user: {type: mongoose.Types.ObjectId , ref:'users', required:true}
 },{
     timestamps: true
+},{
+    versionKey: false
 })
 
 const State = mongoose.model('states',schema)

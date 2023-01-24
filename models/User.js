@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema ({
     photo: {type:String, required:true},
     password: {type:String, required:true},
     admin: {type:Boolean, required:true}
+},{
+    versionKey: false
 })
 
 const User = mongoose.model('users',userSchema)

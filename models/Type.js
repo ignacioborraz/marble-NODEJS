@@ -8,6 +8,8 @@ const schema = new mongoose.Schema ({
     company: {type: mongoose.Types.ObjectId , ref:'companies'}
 },{
     timestamps: true
+},{
+    versionKey: false
 })
 
 const Types = mongoose.model('types',schema)

@@ -6,6 +6,8 @@ const schema = new mongoose.Schema ({
     detailCompany: {type:String, required:true}
 },{
     timestamps: true
+},{
+    versionKey: false
 })
 
 const Company = mongoose.model('companies',schema)

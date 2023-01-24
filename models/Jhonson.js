@@ -9,6 +9,8 @@ const schema = new mongoose.Schema ({
     y: {type:Number, required:true}, //ancho
     z: {type:Number, required:true}, //espesor
     instalation: [{type:String}]
+},{
+    versionKey: false
 })
 
 const Jhonson = mongoose.model('jhonsons',schema)
