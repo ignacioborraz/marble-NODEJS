@@ -1,8 +1,8 @@
 require('dotenv').config()
 require('../database')
-const Sink = require('../../models/Sink')
-const Stock = require('../../models/Stock')
-const Code = require('../../models/Code')
+const Sink = require('../Sink')
+const Stock = require('../Stock')
+const Code = require('../Code')
 
 let stock = [
     {
@@ -389,3 +389,5 @@ stock.forEach(async stock => {
         done: false
     })
 })
+
+

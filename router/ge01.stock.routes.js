@@ -3,16 +3,16 @@ const router = require('express').Router()
 const passport = require('../config/passport')
 
 const {
-    create,get,one,put,destroy
-} = require('../controllers/jhonsonController')
+    create,all,one,update,destroy
+} = require('../controllers/ge01.stock.controller')
 
 router.route('/')
-    .get(passport.authenticate('jwt', {session:false}),get)
+    .get(passport.authenticate('jwt', {session:false}),all)
     .post(passport.authenticate('jwt', {session:false}),create)
 
 router.route('/:id')
     .get(passport.authenticate('jwt', {session:false}),one)
-    .put(passport.authenticate('jwt', {session:false}),put)
+    .put(passport.authenticate('jwt', {session:false}),update)
     .delete(passport.authenticate('jwt', {session:false}),destroy)
 
 module.exports = router

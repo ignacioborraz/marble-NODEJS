@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const authRouter = require('./auth')
+const authRouter = require('./ge00.auth.routes')
 router.use('/auth',authRouter)
 
 const companyRouter = require('./pl01.company.routes')
@@ -14,16 +14,16 @@ router.use('/state',stateRouter)
 const plateRouter = require('./pl05.plate.routes')
 router.use('/plate',plateRouter)
 
-const accesoryRouter = require('./accesory')
-router.use('/accesory',accesoryRouter)
-const jhonsonRouter = require('./jhonson')
+const jhonsonRouter = require('./sk01.jhonson.routes')
 router.use('/jhonson',jhonsonRouter)
-const sinkRouter = require('./sink')
+const accesoryRouter = require('./sk02.accesory.routes')
+router.use('/accesory',accesoryRouter)
+const sinkRouter = require('./sk03.sink.routes')
 router.use('/sink',sinkRouter)
 
-const stockRouter = require('./stock')
+const stockRouter = require('./ge01.stock.routes')
 router.use('/stock',stockRouter)
-const codeRouter = require('./code')
+const codeRouter = require('./ge02.code.routes')
 router.use('/code',codeRouter)
 
 module.exports = router

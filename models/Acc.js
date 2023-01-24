@@ -4,6 +4,8 @@ const schema = new mongoose.Schema ({
     code: {type:String, required:true},
     photo: {type:String, required:true},
     description: {type:String, required:true}
+},{
+    versionKey: false
 })
 
 const Acc = mongoose.model('accesories',schema)

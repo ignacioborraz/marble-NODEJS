@@ -7,6 +7,8 @@ const schema = new mongoose.Schema ({
     user: {type: mongoose.Types.ObjectId , ref:'users', require:true},
     comments: {type:String},
     done: {type:Boolean, required:true}
+},{
+    versionKey: false
 })
 
 const Code = mongoose.model('codes',schema)

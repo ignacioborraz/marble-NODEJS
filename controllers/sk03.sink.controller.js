@@ -38,62 +38,60 @@ const controller = {
     },
 
     one: async(req,res,next) => {
-        let {id} = req.params
         try {
-            let sink = await Sink.findOne({_id:id})
+            let one = await Sink.findById(req.params.id)
                 .populate("jhonson")
                 .populate("accesories")
-            if (sink) {
-                res.status(200).json({
-                response: sink,
-                success: true
-                })
-            } else {
-                res.status(404).json({
-                messagge: 'no se encontraron coincidencias',
-                success: true
-                })
+            if (one) {
+                return res.status(200).json({
+                    response: { sink: one },
+                    success: true
+                })    
             }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
         } catch(error) {
             next(error)
         }
     },
 
-    put: async(req,res,next) => {
-        let {id} = req.params
+    update: async(req,res,next) => {
         try {
-            let sink = await Sink.findOneAndUpdate({_id:id},req.body,{new: true})
-            if (sink) {
-                res.status(200).json({
-                messagge: 'pileta modificada',
-                success: true
-                })
-            } else {
-                res.status(404).json({
-                messagge: 'no se encontraron coincidencias',
-                success: true
-                })
+            let one = await Sink.findOneAndUpdate(
+                { _id: req.params.id },
+                req.body,
+                { new: true }
+            )
+            if (one) {
+                return res.status(200).json({
+                    response: { sink: one },
+                    success: true
+                })    
             }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
         } catch(error) {
             next(error)
         }
     },
 
     destroy: async(req,res,next) => {
-        let {id} = req.params
         try {
-            let sink = await Sink.findOneAndDelete({_id:id})
-            if (sink) {
-                res.status(200).json({
-                messagge: 'pileta eliminada',
-                success: true
-                })
-            } else {
-                res.status(404).json({
-                messagge: 'no se encontraron coincidencias',
-                success: true
-                })
+            let one = await Sink.findOneAndDelete({ _id: req.params.id })
+            if (one) {
+                return res.status(200).json({
+                    response: 'eliminado',
+                    success: true
+                })    
             }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
         } catch(error) {
             next(error)
         }

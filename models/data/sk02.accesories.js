@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('../database')
-const Acc = require('../../models/Acc')
+const Acc = require('../Acc')
 
 let accs = [
     {

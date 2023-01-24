@@ -3,15 +3,10 @@ const Code = require('../models/Code')
 const controller = {
 
     create: async(req,res,next) => {
-        req.body.user = req.user.id
         try {
-            let code = await new Code(req.body).save()
-            res.status(201).json({
-                response: {
-                    id: code._id,
-                    internal: code.internal || null,
-                    note: code.note || null
-                },
+            await Code.create(req.body)
+            return res.status(201).json({
+                response: 'creado',
                 success: true
             })
         } catch(error) {
@@ -21,6 +16,7 @@ const controller = {
 
     all: async(req,res,next) => {
         let query ={}
+        let order = {}
         if (req.query.internal) {
             if (req.query.internal === 'true') {
                 query.note = null
@@ -28,6 +24,7 @@ const controller = {
             } else {
                 query.internal = new RegExp(req.query.internal, 'i')
             }
+            order.internal = 'asc'
         }
         if (req.query.note) {
             if (req.query.note === 'true') {
@@ -36,12 +33,13 @@ const controller = {
             } else {
                 query.note = new RegExp(req.query.note, 'i')
             }
+            order.note = 'asc'
         }
         if (req.query.done) {
             query.done = req.query.done
         }
         try {
-            let codes = await Code.find(query).sort({code: 'asc'})
+            let all = await Code.find(query).sort({code: 'asc'})
                 .populate("user", {nick: 1})    
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type'}}})
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'color'}}})
@@ -51,26 +49,19 @@ const controller = {
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'company'}}})
                 .populate({path: "stock", populate: {path: 'sink', populate: {path: 'jhonson'}}})
                 .populate({path: "stock", populate: {path: 'sink', populate: {path: 'accesories'}}})
-            if (codes) {
-                res.status(200).json({
-                    response: codes,
-                    success: true
-                })
-            } else {
-                res.status(404).json({
-                    messagge: 'no se encontraron coincidencias',
-                    success: true
-                })
-            }
+                .sort(order)
+            return res.status(200).json({
+                response: { codes: all },
+                success: true
+            })
         } catch(error) {
             next(error)
         }
     },
 
     one: async(req,res,next) => {
-        let {id} = req.params
         try {
-            let code = await Code.findOne({_id:id})
+            let one = await Code.findById(req.params.id)
                 .populate("user", {nick: 1})    
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type'}}})
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'color'}}})
@@ -80,57 +71,56 @@ const controller = {
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'company'}}})
                 .populate({path: "stock", populate: {path: 'sink', populate: {path: 'jhonson'}}})
                 .populate({path: "stock", populate: {path: 'sink', populate: {path: 'accesories'}}})
-            if (code) {
-                res.status(200).json({
-                    response: code,
+            if (one) {
+                return res.status(200).json({
+                    response: { code: one },
                     success: true
-                })
-            } else {
-                res.status(404).json({
-                    messagge: 'no se encontraron coincidencias',
-                    success: true
-                })
+                })    
             }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
         } catch(error) {
             next(error)
         }
     },
 
-    put: async(req,res,next) => {
-        let {id} = req.params
+    update: async(req,res,next) => {
         try {
-            let code = await Code.findOneAndUpdate({_id:id},req.body,{new: true})
-            if (code) {
-                res.status(200).json({
-                    messagge: 'codigo modificado',
+            let one = await Code.findOneAndUpdate(
+                { _id: req.params.id },
+                req.body,
+                { new: true }
+            )
+            if (one) {
+                return res.status(200).json({
+                    response: { code: one },
                     success: true
-                })
-            } else {
-                res.status(404).json({
-                    messagge: 'no se encontraron coincidencias',
-                    success: true
-                })
+                })    
             }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
         } catch(error) {
             next(error)
         }
     },
 
-    destroy: async(req,res) => {
-        let {id} = req.params
+    destroy: async(req,res,next) => {
         try {
-            let code = await Code.findOneAndDelete({_id:id})
-            if (code) {
-                res.status(200).json({
-                    messagge: 'codigo eliminado',
+            let one = await Code.findOneAndDelete({ _id: req.params.id })
+            if (one) {
+                return res.status(200).json({
+                    response: 'eliminado',
                     success: true
-                })
-            } else {
-                res.status(404).json({
-                    messagge: 'no se encontraron coincidencias',
-                    success: true
-                })
+                })    
             }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
         } catch(error) {
             next(error)
         }

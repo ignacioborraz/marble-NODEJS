@@ -6,6 +6,8 @@ const schema = new mongoose.Schema ({
     company: {type: mongoose.Types.ObjectId , ref:'companies', required:true},
 },{
     timestamps: true
+},{
+    versionKey: false
 })
 
 const Color = mongoose.model('colors',schema)

@@ -10,6 +10,8 @@ const schema = new mongoose.Schema ({
     done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
 },{
     timestamps: true
+},{
+    versionKey: false
 })
 
 const Plate = mongoose.model('plates',schema)
