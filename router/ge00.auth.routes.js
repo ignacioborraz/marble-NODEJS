@@ -1,29 +1,23 @@
 const router = require('express').Router()
-//const validator = require('./config/validator')
+const accountExistsSignIn = require('../middlewares/accountExistsSignIn')
 const passport = require('../config/passport')
 
 const {
-    signUp,signIn,signOut,verifyToken,getUsers,getOneUser,putUser,deleteUser
 } = require('../controllers/ge00.auth.controller')
-
-router.route('/')
-    .get(passport.authenticate('jwt', {session:false}),getUsers)
 
 router.route('/:id')
     .get(passport.authenticate('jwt', {session:false}),getOneUser)
     .put(passport.authenticate('jwt', {session:false}),putUser)
     .delete(passport.authenticate('jwt', {session:false}),deleteUser)
 
-router.route('/sign/up')
+router.route('/signup')
     .post(signUp)
 
-router.route('/sign/in')
-    .post(signIn)
+router.post('/signin',accountExistsSignIn,signin)
 
-router.route('/sign/out')
+router.route('/signout')
     .post(signOut)
 
-router.route('/sign/token')
-    .get(passport.authenticate('jwt', {session:false}),verifyToken)
+router.post('/token',passport.authenticate('jwt', {session:false}),verifyToken)
 
 module.exports = router
