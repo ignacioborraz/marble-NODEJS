@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const response = require('../config/defaultResponse')
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -38,58 +39,46 @@ const userControllers = {
         }
     },
 
-    signIn: async (req, res) => {
-        const {nick, password} = req.body
+    signin: async (req, res, next) => {
+        let { password } = req.body
+        let { user } = req
         try {
-            const loginUser = await User.findOne({nick})
-            if (!loginUser) {
-                res.json({
-                    success: false,
-                    message: 'verifique los datos'})
-            } else {
-                let checked =  bcryptjs.compareSync(password,loginUser.password)
-                if (checked) {
-                    let user = {
-                        id: loginUser._id,
-                        nick: loginUser.nick,
-                        photo: loginUser.photo,
-                        role: loginUser.role}
-                    await loginUser.save()
-                    let token = jwt.sign({id: loginUser._id}, process.env.SECRET_KEY, {expiresIn: 1000*60*60*24})
-                    res.json({
-                        response: {token,user}, 
-                        success: true, 
-                        message: 'bienvenid@ '+user.nick})
-                } else {
-                    res.json({
-                        success: false,
-                        message: 'verifique los datos'
-                    })
+            const verified = bcryptjs.compareSync(password, user.password)
+            if(verified) {
+                await User.findOneAndUpdate({ _id: user._id },{ online: true },{ new: true })
+                let token = jwt.sign(
+                    { id: user._id },
+                    process.env.SECRET_KEY,
+                    { expiresIn: 60*60*24*7 }
+                )
+                user = {
+                    nick: user.nick,
+                    photo: user.photo,
+                    admin: user.admin
                 }
+                req.body.success = true
+                req.body.sc = 200
+                req.body.data = { user,token }
+                return response(req,res)
             }
-        } catch(error) {
-            console.error(error)
-            res.json({
-                success: false,
-                message: 'no se pudo realizar la acción'
-            })
+                req.body.success = false
+                req.body.sc = 400
+                req.body.data = 'verificar datos'                
+            return response(req,res)
+        } catch (error) {
+            next(error)
         }
     },
 
-    signOut: async (req, res) => {
+    signOut: async (req, res, next) => {
         const {id} = req.body
         try {
-            const user = await User.findOne({_id:id})
-            await user.save()
+            await User.findOneAndUpdate({ _id: id },{ online: false },{ new: true })
             res.json({
                 success: true,
                 message: 'hasta pronto!'})
-        } catch(error) {
-            console.error(error)
-            res.json({
-                success: false,
-                message: 'no se pudo realizar la acción'
-            })
+        } catch (error) {
+            next(error)
         }
     },
 
