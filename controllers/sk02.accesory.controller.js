@@ -20,7 +20,7 @@ const controller = {
             query.code = new RegExp(req.query.code, 'i')
         }
         try {
-            let all = await Asc.find(query)
+            let all = await Acc.find(query)
                 .sort({code:'asc'})
             return res.status(200).json({
                 response: { accesories: all },

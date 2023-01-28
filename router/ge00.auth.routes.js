@@ -2,7 +2,7 @@ const router = require('express').Router()
 const accountExistsSignIn = require('../middlewares/accountExistsSignIn')
 const passport = require('../config/passport')
 
-const {
+const { getOneUser,putUser,deleteUser,signUp,signin,verifyToken,signOut
 } = require('../controllers/ge00.auth.controller')
 
 router.route('/:id')
