@@ -2,7 +2,7 @@ const User = require('../models/User.js')
 const defaultResponse = require("../config/defaultResponse")
 
 async function accountExistsSignIn(req,res,next) {
-    const user = await User.findOne({mail: req.body.mail})
+    const user = await User.findOne({nick: req.body.nick})
     if (user) {
         req.user = {
             _id: user._id,
