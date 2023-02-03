@@ -19,6 +19,9 @@ const controller = {
         if (req.query.code) {
             query.code = new RegExp(req.query.code, 'i')
         }
+        if (req.query.one) {
+            query.code = req.query.one
+        }
         if (req.query.type) {
             query.type = new RegExp(req.query.type, 'i')
         }

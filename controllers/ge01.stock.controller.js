@@ -4,9 +4,9 @@ const controller = {
 
     create: async(req,res,next) => {
         try {
-            await Stock.create(req.body)
+            let one = await Stock.create(req.body)
             return res.status(201).json({
-                response: 'creado',
+                response: one._id,
                 success: true
             })
         } catch(error) {

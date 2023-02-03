@@ -1,10 +1,7 @@
-const router = require('express').Router()
-//const validator = require('./config/validator')
-const passport = require('../config/passport')
+const { create,all,one,update,destroy } = require('../controllers/ge01.stock.controller')
 
-const {
-    create,all,one,update,destroy
-} = require('../controllers/ge01.stock.controller')
+const router = require('express').Router()
+const passport = require('../config/passport')
 
 router.route('/')
     .get(passport.authenticate('jwt', {session:false}),all)

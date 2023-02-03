@@ -11,6 +11,7 @@ module.exports = passport.use(
         async (jwt_payload,done) => {
             try {
                 const user = await User.findOne({_id:jwt_payload.id})
+                delete user.password
                 //console.log(user)
                 return done(null, user)
             } catch(error) {
