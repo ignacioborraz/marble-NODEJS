@@ -1,3 +1,4 @@
+
 module.exports = (req,res) => {
     return res.status(req.body.sc).json({
         success: req.body.success,

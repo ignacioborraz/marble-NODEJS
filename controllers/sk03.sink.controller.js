@@ -3,12 +3,13 @@ const Sink = require('../models/Sink')
 const controller = {
 
     create: async(req,res,next) => {
+        req.body.done = false
         req.body.user = req.user.id
         try {
-            let sinkNew = await new Sink(req.body).save()
-            res.status(201).json({
+            let one = await new Sink(req.body).save()
+            return res.status(201).json({
                 messagge: 'pileta creada',
-                response: sinkNew,
+                response: one._id,
                 success: true
             })
         } catch(error) {

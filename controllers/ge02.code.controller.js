@@ -3,10 +3,19 @@ const Code = require('../models/Code')
 const controller = {
 
     create: async(req,res,next) => {
+        req.body.user = req.user._id
+        req.body.done = false
+        //console.log(req.body)
+        if (req.body.note.includes("I-0")) {
+            req.body.internal = req.body.note
+            req.body.note = null
+        } else {
+            req.body.internal = null
+        }
         try {
-            await Code.create(req.body)
+            let one = await Code.create(req.body)
             return res.status(201).json({
-                response: 'creado',
+                response: one._id,
                 success: true
             })
         } catch(error) {
