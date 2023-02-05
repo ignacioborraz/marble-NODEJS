@@ -10,6 +10,8 @@ const schema = new mongoose.Schema ({
     z: {type:Number, required:true}, //espesor
     instalation: [{ type: String, enum: ['monocomando','dosificador','tres agujeros','inferior'] }],
 },{
+    timestamps: true
+},{
     versionKey: false
 })
 

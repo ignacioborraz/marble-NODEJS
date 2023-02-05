@@ -6,13 +6,13 @@ const jwt = require('jsonwebtoken')
 const userControllers = {
 
     signUp: async (req,res) => {
-        const {nick, photo, password, admin} = req.body
+        const {nick, photo, password, admin, online} = req.body
         try {
             const user = await User.findOne({nick})
             if (!user) {
                 try {
                     let hashWord = bcryptjs.hashSync(password, 10)
-                    await new User({nick, photo, password: hashWord, admin}).save()
+                    await new User({nick, photo, password: hashWord, admin, online}).save()
                     res.json({
                         success: true, 
                         message: 'usuario creado'

@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node ./server.js",
     "dev": "nodemon ./server.js",
-    "plates": "node ./models/data/pl00.plates.js"
+    "plates": "node ./models/data/pl00.plates.js",
+    "sinks": "node ./models/data/sk01.jhonson.js",
+    "accs": "node ./models/data/sk02.accesories.js"
   },
   "repository": {
     "type": "git",
