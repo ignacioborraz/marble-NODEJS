@@ -49,18 +49,22 @@ const controller = {
         }
         try {
             let all = await Code.find(query).sort({code: 'asc'})
-                .populate("user", {nick: 1})    
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'color'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'state'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'lastStates'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'company'}}})
-                .populate({path: "stock", populate: {path: 'sink', populate: {path: 'jhonson'}}})
-                .populate({path: "stock", populate: {path: 'sink', populate: {path: 'accesories'}}})
-                .sort(order)
+                .populate("user", {nick: 1})
+                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type', select: 'name'}}})
+                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'color', select: 'name photo'}}})
+                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'company', select: 'nameCompany'}}})
+                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'state', select: 'state height heightSquare width widthSquare'}}})
+                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'lastStates', select: 'state height heightSquare width widthSquare'}}})
+                .populate({path: "stock", populate: {path: 'sink', populate: {path: 'accesories', select: '-createdAt -updatedAt -__v', sort: {code: 1}}}})
+                .populate({path: "stock", populate: {path: 'sink', populate: { path: 'jhonson', select: '-createdAt -updatedAt -__v'}}, select: '-createdAt -updatedAt -__v'})
+            if (all?.length===0) {
+                return res.status(404).json({
+                    response: 'no hay stock',
+                    success: false
+                })
+            }
             return res.status(200).json({
-                response: { codes: all },
+                response: all,
                 success: true
             })
         } catch(error) {
