@@ -1,5 +1,5 @@
 require('dotenv').config()
-require('../database')
+require('../../config/database')
 const Acc = require('../Acc')
 
 let accs = [
@@ -241,10 +241,4 @@ let accs = [
     }
 ]
 
-accs.forEach(acc => {
-    Acc.create({
-        code: acc.code,
-        photo: acc.photo,
-        description: acc.description
-    })
-})
+Acc.insertMany(accs)

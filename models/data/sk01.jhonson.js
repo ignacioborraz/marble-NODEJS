@@ -1,5 +1,5 @@
 require('dotenv').config()
-require('../database')
+require('../../config/database')
 const Jhonson = require('../Jhonson')
 
 let jhonsons = [
@@ -21,7 +21,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 66,
@@ -31,7 +31,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 67,
@@ -41,7 +41,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 13,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 68,
@@ -51,7 +51,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 69,
@@ -61,7 +61,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 70,
@@ -71,7 +71,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 71,
@@ -81,7 +81,7 @@ let jhonsons = [
         x: 59.8,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 72,
@@ -91,7 +91,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 73,
@@ -101,7 +101,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 74,
@@ -111,7 +111,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 75,
@@ -121,7 +121,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 76,
@@ -131,7 +131,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 7,
@@ -141,7 +141,7 @@ let jhonsons = [
         x: 77,
         y: 43,
         z: 20,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 8,
@@ -151,7 +151,7 @@ let jhonsons = [
         x: 34,
         y: 28.5,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 9,
@@ -161,7 +161,7 @@ let jhonsons = [
         x: 34,
         y: 28.5,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 10,
@@ -171,7 +171,7 @@ let jhonsons = [
         x: 34,
         y: 28.5,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 11,
@@ -181,7 +181,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 12,
@@ -191,7 +191,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 13,
@@ -201,7 +201,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 14,
@@ -211,7 +211,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 15,
@@ -221,7 +221,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 16,
@@ -231,7 +231,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 17,
@@ -241,7 +241,7 @@ let jhonsons = [
         x: 44,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 18,
@@ -251,7 +251,7 @@ let jhonsons = [
         x: 44,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 19,
@@ -261,7 +261,7 @@ let jhonsons = [
         x: 44,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 20,
@@ -271,7 +271,7 @@ let jhonsons = [
         x: 44,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 21,
@@ -281,7 +281,7 @@ let jhonsons = [
         x: 50,
         y: 40,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 22,
@@ -291,7 +291,7 @@ let jhonsons = [
         x: 50,
         y: 40,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 23,
@@ -301,7 +301,7 @@ let jhonsons = [
         x: 54,
         y: 36,
         z: 24,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 24,
@@ -311,7 +311,7 @@ let jhonsons = [
         x: 60,
         y: 37,
         z: 20,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 25,
@@ -321,7 +321,7 @@ let jhonsons = [
         x: 60,
         y: 37,
         z: 20,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 26,
@@ -331,7 +331,7 @@ let jhonsons = [
         x: 60,
         y: 37,
         z: 20,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 27,
@@ -341,7 +341,7 @@ let jhonsons = [
         x: 60,
         y: 37,
         z: 20,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 28,
@@ -361,7 +361,7 @@ let jhonsons = [
         x: 50,
         y: 40,
         z: 26,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 92,
@@ -381,7 +381,7 @@ let jhonsons = [
         x: 50,
         y: 40,
         z: 25,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 5,
@@ -471,7 +471,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 17.5,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 41,
@@ -481,7 +481,7 @@ let jhonsons = [
         x: 37,
         y: 34,
         z: 17.5,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 42,
@@ -491,7 +491,7 @@ let jhonsons = [
         x: 40,
         y: 34,
         z: 17.5,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 43,
@@ -501,7 +501,7 @@ let jhonsons = [
         x: 40,
         y: 34,
         z: 17.5,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 61,
@@ -511,7 +511,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 17.5,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 62,
@@ -521,7 +521,7 @@ let jhonsons = [
         x: 70.8,
         y: 37,
         z: 17.5,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 63,
@@ -561,7 +561,7 @@ let jhonsons = [
         x: 63.3,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 78,
@@ -571,7 +571,7 @@ let jhonsons = [
         x: 63.3,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 79,
@@ -581,7 +581,7 @@ let jhonsons = [
         x: 63.3,
         y: 34,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 80,
@@ -591,7 +591,7 @@ let jhonsons = [
         x: 63.3,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 81,
@@ -601,7 +601,7 @@ let jhonsons = [
         x: 63.3,
         y: 34,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 82,
@@ -611,7 +611,7 @@ let jhonsons = [
         x: 63.8,
         y: 37,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 83,
@@ -621,7 +621,7 @@ let jhonsons = [
         x: 63.8,
         y: 37,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 84,
@@ -631,7 +631,7 @@ let jhonsons = [
         x: 63.8,
         y: 37,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 85,
@@ -641,7 +641,7 @@ let jhonsons = [
         x: 63.8,
         y: 37,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 86,
@@ -651,7 +651,7 @@ let jhonsons = [
         x: 63.8,
         y: 37,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 87,
@@ -681,7 +681,7 @@ let jhonsons = [
         x: 34,
         y: 23.5,
         z: 14,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 47,
@@ -691,7 +691,7 @@ let jhonsons = [
         x: 34,
         y: 23.5,
         z: 14,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 48,
@@ -701,7 +701,7 @@ let jhonsons = [
         x: 34,
         y: 23.5,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 90,
@@ -731,7 +731,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 50,
@@ -741,7 +741,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 51,
@@ -751,7 +751,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 13,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 52,
@@ -761,7 +761,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 53,
@@ -771,7 +771,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 15,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 54,
@@ -781,7 +781,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 55,
@@ -791,7 +791,7 @@ let jhonsons = [
         x: 52,
         y: 32,
         z: 18,
-        instalation: ['abajo']
+        instalation: ['inferior']
     },
     {
         order: 56,
@@ -815,15 +815,4 @@ let jhonsons = [
     }    
 ]
 
-jhonsons.forEach(jhonson => {
-    Jhonson.create({
-        order: jhonson.order,
-        code: jhonson.code,
-        type: jhonson.type,
-        photo: jhonson.photo,
-        x: jhonson.x,
-        y: jhonson.y,
-        z: jhonson.z,
-        instalation: jhonson.instalation
-    })
-})
+Jhonson.insertMany(jhonsons)

@@ -8,6 +8,8 @@ const schema = new mongoose.Schema ({
     comments: {type:String},
     done: {type:Boolean, required:true}
 },{
+    timestamps: true
+},{
     versionKey: false
 })
 

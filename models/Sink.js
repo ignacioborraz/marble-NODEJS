@@ -7,6 +7,8 @@ const schema = new mongoose.Schema ({
     done: { type: Boolean, required: true} , //las piletas entregadas pasan de false a true
     user: { type: mongoose.Types.ObjectId , ref:'users' }
 },{
+    timestamps: true
+},{
     versionKey: false
 })
 
