@@ -26,29 +26,21 @@ const controller = {
     all: async(req,res,next) => {
         let query ={}
         let order = {}
-        if (req.query.internal) {
-            if (req.query.internal === 'true') {
-                query.note = null
-                query.done = false
-            } else {
-                query.internal = new RegExp(req.query.internal, 'i')
-            }
+        if (req.query.type==='internal') {
+            query.note = null
+            query.done = false
             order.internal = 'asc'
         }
-        if (req.query.note) {
-            if (req.query.note === 'true') {
-                query.internal = null
-                query.done = false
-            } else {
-                query.note = new RegExp(req.query.note, 'i')
-            }
+        if (req.query.type==='note') {
+            query.internal = null
+            query.done = false
             order.note = 'asc'
         }
         if (req.query.done) {
             query.done = req.query.done
         }
         try {
-            let all = await Code.find(query).sort({code: 'asc'})
+            let all = await Code.find(query)
                 .populate("user", {nick: 1})
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type', select: 'name'}}})
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'color', select: 'name photo'}}})
@@ -57,6 +49,7 @@ const controller = {
                 .populate({path: "stock", populate: {path: 'plate', populate: {path: 'lastStates', select: 'state height heightSquare width widthSquare'}}})
                 .populate({path: "stock", populate: {path: 'sink', populate: {path: 'accesories', select: '-createdAt -updatedAt -__v', sort: {code: 1}}}})
                 .populate({path: "stock", populate: {path: 'sink', populate: { path: 'jhonson', select: '-createdAt -updatedAt -__v'}}, select: '-createdAt -updatedAt -__v'})
+                .sort(order)
             if (all?.length===0) {
                 return res.status(404).json({
                     response: 'no hay stock',
