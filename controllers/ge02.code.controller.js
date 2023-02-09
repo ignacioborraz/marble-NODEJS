@@ -30,15 +30,25 @@ const controller = {
             query.note = null
             query.done = false
             order.internal = 'asc'
+            if (req.query.text) {
+                query.internal = new RegExp(req.query.text, 'i')
+            }
         }
         if (req.query.type==='note') {
             query.internal = null
             query.done = false
             order.note = 'asc'
         }
-        if (req.query.done) {
-            query.done = req.query.done
+        if (req.query.done==='true') {
+            query.done = true
         }
+        if (req.query.note) {
+            query.note = new RegExp(req.query.note, 'i')
+        }
+        if (req.query.comments) {
+            query.comments = new RegExp(req.query.comments, 'i')
+        }
+        console.log(query)
         try {
             let all = await Code.find(query)
                 .populate("user", {nick: 1})
@@ -51,8 +61,8 @@ const controller = {
                 .populate({path: "stock", populate: {path: 'sink', populate: { path: 'jhonson', select: '-createdAt -updatedAt -__v'}}, select: '-createdAt -updatedAt -__v'})
                 .sort(order)
             if (all?.length===0) {
-                return res.status(404).json({
-                    response: 'no hay stock',
+                return res.status(200).json({
+                    response: [],
                     success: false
                 })
             }
