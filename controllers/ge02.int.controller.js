@@ -1,19 +1,11 @@
-const Code = require('../models/Code')
+const Note = require('../models/CodeNote')
 
 const controller = {
 
     create: async(req,res,next) => {
         req.body.user = req.user._id
-        req.body.done = false
-        //console.log(req.body)
-        if (req.body.note) {
-            req.body.internal = null
-        }
-        if (req.body.internal) {
-            req.body.note = null
-        }
         try {
-            let one = await Code.create(req.body)
+            let one = await Note.create(req.body)
             return res.status(201).json({
                 response: one._id,
                 success: true
@@ -25,41 +17,26 @@ const controller = {
 
     all: async(req,res,next) => {
         let query ={}
-        let order = {}
-        if (req.query.type==='internal') {
-            query.note = null
-            query.done = false
-            order.internal = 'asc'
-            if (req.query.text) {
-                query.internal = new RegExp(req.query.text, 'i')
-            }
-        }
-        if (req.query.type==='note') {
-            query.internal = null
-            query.done = false
-            order.note = 'asc'
-        }
-        if (req.query.done==='true') {
-            query.done = true
-        }
-        if (req.query.note) {
-            query.note = new RegExp(req.query.note, 'i')
-        }
-        if (req.query.comments) {
-            query.comments = new RegExp(req.query.comments, 'i')
+        if (req.query.internal) {
+            query.internal = new RegExp(req.query.internal, 'i')
         }
         try {
-            let all = await Code.find(query)
-                .populate("user", {nick: 1})
-                .select('-createdAt -updatedAt -__v')
-                .sort(order)
+            let all = await Note.find(query)
+                .populate("user", { nick: 1 })
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'type', select: 'name' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'color', select: 'name photo' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'company', select: 'nameCompany' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'state', select: 'state height heightSquare width widthSquare' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'lastStates', select: 'state height heightSquare width widthSquare' }}})
+                .populate({ path: "stock", populate: { path: 'sink', populate: { path: 'accesories', select: '-createdAt -updatedAt -__v', sort: { code: 1 }}}})
+                .populate({ path: "stock", populate: { path: 'sink', populate: { path: 'jhonson', select: '-createdAt -updatedAt -__v' }}, select: '-createdAt -updatedAt -__v' })
+                .sort({ internal: 'asc' })
             if (all?.length===0) {
                 return res.status(200).json({
                     response: [],
                     success: false
                 })
             }
-
             return res.status(200).json({
                 response: all,
                 success: true
@@ -71,54 +48,54 @@ const controller = {
 
     one: async(req,res,next) => {
         try {
-            let onlyPlates = await Code.findById(req.params.id)
-                .populate("user", {nick: 1})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'type', select: 'name'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'color', select: 'name photo'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'company', select: 'nameCompany'}}})
-                .populate({path: "stock", populate: {path: 'plate', populate: {path: 'state', select: 'state height heightSquare width widthSquare'}}})
-                .populate({path: "stock", select: '-createdAt -updatedAt -__v', match: { sink: null }, populate: {path: 'plate', populate: {path: 'lastStates', select: 'state height heightSquare width widthSquare'}}})
-            let onlySinks = await Code.findById(req.params.id)
-                .populate("user", {nick: 1})
+            let onlyPlates = await Note.findById(req.params.id)
+                .populate("user", { nick: 1 })
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'type', select: 'name' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'color', select: 'name photo' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'company', select: 'nameCompany' }}})
+                .populate({ path: "stock", populate: { path: 'plate', populate: { path: 'state', select: 'state height heightSquare width widthSquare' }}})
+                .populate({ path: "stock",  populate: { path: 'plate', populate: { path: 'lastStates', select: 'state height heightSquare width widthSquare' }, match: { sink: null }, select: '-createdAt -updatedAt -__v' }})
+            let onlySinks = await Note.findById(req.params.id)
+                .populate("user", { nick: 1 })
                 .populate({
                     path: "stock",
-                    select: '-createdAt -updatedAt -__v',
-                    match: { plate: null },
                     populate: {
                         path: 'sink',
                         populate: {
                             path: 'accesories',
                             select: '-createdAt -updatedAt -__v',
-                            sort: {code: 1}
+                            sort: { code: 1 }
                         }
-                    }
+                    },
+                    select: '-createdAt -updatedAt -__v',
+                    match: { plate: null }
                 })
                 .populate({
                     path: "stock",
-                    select: '-createdAt -updatedAt -__v',
-                    match: { plate: null },
                     populate: {
                         path: 'sink',
                         populate: {
                             path: 'jhonson',
                             select: '-createdAt -updatedAt -__v'
                         }
-                    }
+                    },
+                    select: '-createdAt -updatedAt -__v',
+                    match: { plate: null }
                 })
             let response = {
                 plates: [],
                 sinks: []
             }
             if (onlyPlates?.length===0 && onlySinks?.length===0) {
-                return res.status(404).json({
+                return res.status(200).json({
                     response,
                     success: false
                 })
             }
-            if (onlyPlates) {
+            if (onlyPlates?.length>0) {
                 response.plates = onlyPlates.stock
             }
-            if (onlySinks) {
+            if (onlySinks?.length>0) {
                 response.sinks = onlySinks.stock
             }
             return res.status(200).json({
@@ -131,12 +108,30 @@ const controller = {
     },
 
     update: async(req,res,next) => {
+        let one = {}
         try {
-            let one = await Code.findOneAndUpdate(
-                { _id: req.params.id },
-                { $push: req.body },
-                { new: true }
-            )
+            if (req.query.action==='addid') {
+                one = await Note.findOneAndUpdate(
+                    { _id: req.params.id },
+                    { $push: req.body },
+                    { new: true }
+                )
+            }
+            if (req.query.action==='delid') {
+                one = await Note.findOneAndUpdate(
+                    { _id: req.params.id },
+                    { $pull: req.body },
+                    { new: true }
+                )
+            }
+            if (req.query.action==='upd') {
+                one = await Note.findOneAndUpdate(
+                    { _id: req.params.id },
+                    { $pull: req.body },
+                    { new: true }
+                )
+            }
+            
             if (one) {
                 return res.status(200).json({
                     response: { code: one },
@@ -154,7 +149,7 @@ const controller = {
 
     pullData: async(req,res,next) => {
         try {
-            let one = await Code.findOneAndUpdate(
+            let one = await Note.findOneAndUpdate(
                 { _id: req.params.id },
                 { $pull: req.body },
                 { new: true }
@@ -176,7 +171,7 @@ const controller = {
 
     destroy: async(req,res,next) => {
         try {
-            let one = await Code.findOneAndDelete({ _id: req.params.id })
+            let one = await Note.findOneAndDelete({ _id: req.params.id })
             if (one) {
                 return res.status(200).json({
                     response: 'eliminado',
@@ -195,8 +190,8 @@ const controller = {
     next: async(req,res,next) => {
         let all = new RegExp("", 'i')
         try {
-            let internal = await Code.find({ internal: all }).sort({ createdAt:-1 }).limit(1)
-            let note = await Code.find({ note: all }).sort({ createdAt:-1 }).limit(1)
+            let internal = await Note.find({ internal: all }).sort({ createdAt:-1 }).limit(1)
+            let note = await Note.find({ note: all }).sort({ createdAt:-1 }).limit(1)
             let response = {
                 codes: {
                     internal: 1,

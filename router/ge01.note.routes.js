@@ -1,13 +1,13 @@
-const { create,all,one,update,destroy } = require('../controllers/sk03.sink.controller')
+const { create,all,one,update,destroy } = require('../controllers/ge03.note.controller')
 
 const router = require('express').Router()
 const passport = require('../config/passport')
-//const isAdmin = require('../middlewares/isAdmin')
+const addUserAndDone = require('../middlewares/addUserAndDone')
 
-router.post('/',passport.authenticate('jwt', { session:false }),create)
+router.post('/',passport.authenticate('jwt', { session:false }),addUserAndDone,create)
 router.get('/',passport.authenticate('jwt', { session:false }),all)
     
-router.get('/:id',passport.authenticate('jwt', { session:false }),one)
+router.get('/:number_code',passport.authenticate('jwt', { session:false }),one)
 router.put('/:id',passport.authenticate('jwt', { session:false }),update)
 router.delete('/:id',passport.authenticate('jwt', { session:false }),destroy)
 
