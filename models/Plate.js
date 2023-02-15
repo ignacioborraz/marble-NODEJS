@@ -7,7 +7,6 @@ const schema = new mongoose.Schema ({
     state: {type: mongoose.Types.ObjectId , ref:'states', required:true}, //estado ultimo
     lastStates: [{type: mongoose.Types.ObjectId , ref:'states', required:true}], //todos los estados
     company: {type: mongoose.Types.ObjectId , ref:'companies', required:true},
-    done: {type:Boolean, required:true}, //las piletas entregadas pasan de false a true
 },{
     timestamps: true
 },{
