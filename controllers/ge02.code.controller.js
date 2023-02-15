@@ -48,6 +48,7 @@ const controller = {
         if (req.query.comments) {
             query.comments = new RegExp(req.query.comments, 'i')
         }
+        console.log(query)
         try {
             let all = await Code.find(query)
                 .populate("user", {nick: 1})
