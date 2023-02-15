@@ -15,7 +15,7 @@ const plateRouter = require('./pl05.plate.routes')
 router.use('/plate',plateRouter)
 
 const jhonsonRouter = require('./sk01.ksink.routes')
-router.use('/jhonson',jhonsonRouter)
+router.use('/ksink',jhonsonRouter)
 const accesoryRouter = require('./sk02.accesory.routes')
 router.use('/accesory',accesoryRouter)
 
