@@ -1,10 +1,10 @@
-const Jhonson = require('../models/Jhonson')
+const Ksink = require('../models/Ksink')
 
 const controller = {
 
     create: async(req,res,next) => {
         try {
-            await Jhonson.create(req.body)
+            await Ksink.create(req.body)
             return res.status(201).json({
                 response: 'creado',
                 success: true
@@ -26,7 +26,7 @@ const controller = {
             query.type = new RegExp(req.query.type, 'i')
         }
         try {
-            let all = await Jhonson.find(query)
+            let all = await Ksink.find(query)
                 .sort({code:'asc'})
             return res.status(200).json({
                 response: { jhonsons: all },
@@ -39,7 +39,7 @@ const controller = {
 
     one: async(req,res,next) => {
         try {
-            let one = await Jhonson.findById(req.params.id)
+            let one = await Ksink.findById(req.params.id)
             if (one) {
                 return res.status(200).json({
                     response: { jhonson: one },
@@ -57,7 +57,7 @@ const controller = {
 
     update: async(req,res,next) => {
         try {
-            let one = await Jhonson.findOneAndUpdate(
+            let one = await Ksink.findOneAndUpdate(
                 { _id: req.params.id },
                 req.body,
                 { new: true }
@@ -79,7 +79,7 @@ const controller = {
 
     destroy: async(req,res,next) => {
         try {
-            let one = await Jhonson.findOneAndDelete({ _id: req.params.id })
+            let one = await Ksink.findOneAndDelete({ _id: req.params.id })
             if (one) {
                 return res.status(200).json({
                     response: 'eliminado',

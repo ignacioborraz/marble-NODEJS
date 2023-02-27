@@ -27,11 +27,11 @@ const controller = {
                     await upd.save()
                 }
                 return res.status(201).json({
-                    response: number_code,
+                    response: { number_code, messages: 'stock cargado' },
                     success: true
                 })
             } else {
-                let messages = {}
+                let response = {}
                 for (let doc of data) {
                     let upd = {}
                     if (doc.plate) {
@@ -44,22 +44,23 @@ const controller = {
                         upd = await Acc.findById(doc.accesory)
                     }
                     if (upd.stock===0) {
-                        messages[upd.name] = `no hay stock de ${upd.name}`
+                        response[upd.name] = `no hay stock de ${upd.name}`
                     } else if (upd.stock<doc.stock) {
                         doc.stock = upd.stock
                         upd.stock = 0
-                        messages[upd.name] = `solo hay ${doc.stock} de ${upd.name}`
+                        response[upd.name] = `solo hay ${doc.stock} de ${upd.name}`
                         await upd.save()
                         await Note.create(doc)
                     } else {
                         upd.stock = upd.stock - doc.stock
+                        response = 'nota creada'
                         await upd.save()
-                        console.log(upd)
+                        //console.log(upd)
                         await Note.create(doc)
                     }
                 }
                 return res.status(201).json({
-                    response: { number_code, messages },
+                    response: { number_code, messages: response },
                     success: true
                 })
             }
@@ -196,6 +197,74 @@ const controller = {
     },
 
     update: async(req,res,next) => {
+        try {
+            let note = await Note.findOne({ _id: req.params.id })
+            let old_stock = note.stock
+            let old_accesories = note.accesory
+            let one = await Note.findOneAndUpdate(
+                { _id: req.params.id },
+                req.body,
+                { new: true }
+            )
+            if (one) {
+                if (Number(one.stock) === Number(old_stock)) {
+                    //console.log({ old_accesories,news:one.accesory })
+                    if (one.accesory) {
+                        for (let each of one.accesory) {
+                            if (!old_accesories.includes(each)) {
+                                let accesory = await Acc.findById(each)
+                                accesory.stock = accesory.stock - Number(one.stock)
+                                await accesory.save()
+                            }
+                        }
+                        for (let each of old_accesories) {
+                            if (!one.accesory.includes(each)) {
+                                let accesory = await Acc.findById(each)
+                                accesory.stock = accesory.stock + Number(one.stock)
+                                await accesory.save()
+                            }
+                        }
+                    }
+                } else {
+                    if (one.ksink) {
+                        let ksink = await Ksink.findById(one.ksink)
+                        ksink.stock = ksink.stock - (Number(one.stock) - Number(old_stock))
+                        await ksink.save()
+                    }
+                    if (one.accesory) {
+                        for (let each of one.accesory) {
+                            let accesory = await Acc.findById(each)
+                            if (!old_accesories.includes(each)) {
+                                accesory.stock = accesory.stock - Number(one.stock)
+                            } else {
+                                accesory.stock = accesory.stock - (Number(one.stock) - Number(old_stock))
+                            }
+                            await accesory.save()
+                        }
+                        for (let each of old_accesories) {
+                            let accesory = await Acc.findById(each)
+                            if (!one.accesory.includes(each)) {
+                                accesory.stock = accesory.stock + Number(old_stock)
+                            }
+                            await accesory.save()
+                        }
+                    }
+                }
+                return res.status(200).json({
+                    response: 'modificado',
+                    success: true
+                })
+            }
+            return res.status(404).json({
+                response: 'no encontrado',
+                success: false
+            })
+        } catch(error) {
+            next(error)
+        }
+    },
+
+    pushData: async(req,res,next) => {
         try {
             let one = await Note.findOneAndUpdate(
                 { _id: req.params.id },
