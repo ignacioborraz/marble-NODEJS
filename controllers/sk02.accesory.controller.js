@@ -21,7 +21,7 @@ const controller = {
         }
         try {
             let all = await Acc.find(query)
-                .sort({code:'asc'})
+                .sort({ name: 1 })
             return res.status(200).json({
                 response: { accesories: all },
                 success: true
