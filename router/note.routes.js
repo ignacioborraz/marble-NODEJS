@@ -1,4 +1,4 @@
-const { create,all,one,update,pushData,pullData,destroy } = require('../controllers/ge03.note.controller')
+const { create,all,one,update,pushData,pullData,destroy } = require('../controllers/note.controller')
 
 const router = require('express').Router()
 const passport = require('../config/passport')
