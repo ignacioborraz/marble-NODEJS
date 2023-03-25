@@ -1,7 +1,9 @@
 const router = require('express').Router()
 
-const authRouter = require('./ge00.auth.routes')
+const authRouter = require('./au01.user.routes')
 router.use('/auth',authRouter)
+const clientRouter = require('./au02.client.routes')
+router.use('/clients',clientRouter)
 
 const companyRouter = require('./pl01.company.routes')
 router.use('/company',companyRouter)
@@ -19,7 +21,7 @@ router.use('/ksink',jhonsonRouter)
 const accesoryRouter = require('./sk02.accesory.routes')
 router.use('/accesory',accesoryRouter)
 
-const codeRouter = require('./ge01.note.routes')
+const codeRouter = require('./note.routes')
 router.use('/note',codeRouter)
 
 module.exports = router

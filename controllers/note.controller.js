@@ -8,59 +8,54 @@ const controller = {
 
     create: async(req,res,next) => {
         //console.log(req.body)
-        const { number_code,data,internal } = req.body
+        let response = true
         try {
-            if(internal) {
-                await Note.insertMany(data)
-                for (let doc of data) {
-                    let upd = {}
-                    if (doc.plate) {
-                        upd = await Plate.findById(doc.plate)
-                    }
-                    if (doc.ksink) {
-                        upd = await Ksink.findById(doc.ksink)
-                    }
-                    if (doc.accesory) {
-                        upd = await Acc.findById(doc.accesory)
-                    }
-                    upd.stock = upd.stock + doc.stock
+            if(req.body.internal) {
+                if (req.body.plate) {
+                    let upd = await Plate.findById(req.body.plate)
+                    upd.stock = upd.stock + req.body.stock
+                    await upd.save()    
+                }
+                if (req.body.ksink) {
+                    let upd = await Ksink.findById(req.body.ksink)
+                    upd.stock = upd.stock + req.body.stock
                     await upd.save()
                 }
-                return res.status(201).json({
-                    response: { number_code, messages: 'stock cargado' },
-                    success: true
-                })
+                if (req.body.accesory) {
+                    let upd = await Acc.findById(req.body.accesory)
+                    upd.stock = upd.stock + req.body.stock
+                    await upd.save()
+                }
             } else {
-                let response = {}
-                for (let doc of data) {
-                    let upd = {}
-                    if (doc.plate) {
-                        upd = await Plate.findById(doc.plate)
-                    }
-                    if (doc.ksink) {
-                        upd = await Ksink.findById(doc.ksink)
-                    }
-                    if (doc.accesory) {
-                        upd = await Acc.findById(doc.accesory)
-                    }
-                    if (upd.stock===0) {
-                        response[upd.name] = `no hay stock de ${upd.name}`
-                    } else if (upd.stock<doc.stock) {
-                        doc.stock = upd.stock
-                        upd.stock = 0
-                        response[upd.name] = `solo hay ${doc.stock} de ${upd.name}`
-                        await upd.save()
-                        await Note.create(doc)
-                    } else {
-                        upd.stock = upd.stock - doc.stock
-                        response = 'nota creada'
-                        await upd.save()
-                        //console.log(upd)
-                        await Note.create(doc)
+                if (req.body.plate) {
+                    let upd = await Plate.findById(req.body.plate)
+                    upd.stock = upd.stock - req.body.stock
+                    await upd.save()
+                }
+                if (req.body.ksink) {
+                    let upd = await Ksink.findById(req.body.ksink)
+                    upd.stock = upd.stock - req.body.stock
+                    await upd.save()
+                }
+                if (req.body.accesory.length) {
+                    for (let acc of req.body.accesory) {
+                        let upd = await Acc.findById(acc)
+                        if (upd.stock===0) {
+                            response = `ATENCION: no hay stock de ${upd.name}`
+                        } else if (upd.stock<req.body.stock) {
+                            req.body.stock = upd.stock
+                            upd.stock = 0
+                            response = `ATENCION: sólo hay ${req.body.stock} de ${upd.name}`
+                            await upd.save()
+                        } else {
+                            upd.stock = upd.stock - req.body.stock
+                            await upd.save()
+                        }
                     }
                 }
+                await Note.create(req.body)
                 return res.status(201).json({
-                    response: { number_code, messages: response },
+                    response,
                     success: true
                 })
             }
@@ -88,8 +83,8 @@ const controller = {
         if (req.query.type==='done') {
             query.done = true
         }
-        if (req.query.name) {
-            query.name = new RegExp(req.query.name, 'i')
+        if (req.query.note) {
+            query.number_code = new RegExp(`${req.query.note}\\d`, 'g')
         }
         if (req.query.comments) {
             query.comments = new RegExp(req.query.comments, 'i')
@@ -327,21 +322,20 @@ const controller = {
     },
 
     next: async(req,res,next) => {
-        let all = new RegExp("", 'i')
         try {
-            let internal = await Note.find({ internal: all }).sort({ createdAt:-1 }).limit(1)
-            let note = await Note.find({ note: all }).sort({ createdAt:-1 }).limit(1)
             let response = {
-                codes: {
-                    internal: 1,
-                    note: 1
-                }
+                internal: 1,
+                note: 1
             }
-            if (internal.length > 0) {
-                response.codes.internal = Number(internal[0].internal)+1
+            let internal = await Note.find({ internal: true }).sort({ createdAt:-1 }).limit(1)
+            //console.log(internal[0]?.number_code)
+            let note = await Note.find({ internal: false }).sort({ createdAt:-1 }).limit(1)
+            //console.log(note[0]?.number_code)
+            if (internal.length) {
+                response.internal = Number(internal[0].number_code)+1
             }
-            if (note.length > 0) {
-                response.codes.note = Number(note[0].note)+1
+            if (note.length) {
+                response.note = Number(note[0].number_code)+1
             }
             return res.status(200).json({
                 response,

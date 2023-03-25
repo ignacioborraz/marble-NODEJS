@@ -1,4 +1,4 @@
-const { create,all,one,update,pushData,pullData,destroy } = require('../controllers/ge03.note.controller')
+const { create,all,one,update,pushData,pullData,destroy,next } = require('../controllers/note.controller')
 
 const router = require('express').Router()
 const passport = require('../config/passport')
@@ -6,7 +6,8 @@ const addUserAndDone = require('../middlewares/addUserAndDone')
 
 router.post('/',passport.authenticate('jwt', { session:false }),addUserAndDone,create)
 router.get('/',passport.authenticate('jwt', { session:false }),all)
-    
+
+router.get('/next',passport.authenticate('jwt', { session:false }),next)
 router.get('/:number_code',passport.authenticate('jwt', { session:false }),one)
 router.put('/:id',passport.authenticate('jwt', { session:false }),update)
 router.put('/push/:id',passport.authenticate('jwt', { session:false }),pushData)

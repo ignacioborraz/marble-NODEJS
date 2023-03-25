@@ -3,7 +3,7 @@ const accountExistsSignIn = require('../middlewares/accountExistsSignIn')
 const passport = require('../config/passport')
 
 const { getOneUser,putUser,deleteUser,signUp,signin,verifyToken,signOut
-} = require('../controllers/ge00.auth.controller')
+} = require('../controllers/au01.user.controller')
 
 router.route('/:id')
     .get(passport.authenticate('jwt', {session:false}),getOneUser)
