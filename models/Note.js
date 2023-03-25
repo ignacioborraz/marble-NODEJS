@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema ({
-    number_code: { type: Number, require:true }, //no tiene que ser unica porque se busca por numero de orden (interna o pedido)
+    number_code: { type: String, require:true }, //no tiene que ser unica porque se busca por numero de orden (interna o pedido)
     stock: { type: Number, require:true },
     plate: { type: mongoose.Types.ObjectId , ref:'plates' },
     ksink: { type: mongoose.Types.ObjectId , ref:'ksinks' },

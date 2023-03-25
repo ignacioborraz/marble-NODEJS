@@ -3,7 +3,7 @@ const router = require('express').Router()
 const authRouter = require('./au01.user.routes')
 router.use('/auth',authRouter)
 const clientRouter = require('./au02.client.routes')
-router.use('/auth',clientRouter)
+router.use('/clients',clientRouter)
 
 const companyRouter = require('./pl01.company.routes')
 router.use('/company',companyRouter)
