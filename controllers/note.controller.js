@@ -83,8 +83,8 @@ const controller = {
         if (req.query.type==='done') {
             query.done = true
         }
-        if (req.query.note) {
-            query.number_code = new RegExp(`${req.query.note}\\d`, 'g')
+        if (req.query.numbers) {
+            query.number_code = new RegExp(req.query.numbers, 'i')
         }
         if (req.query.comments) {
             query.comments = new RegExp(req.query.comments, 'i')
