@@ -8,7 +8,7 @@ let notes = [
     {
         number_code: 1030,
         stock: 1,
-        ksink: '63e705965316e54aaaab35c7',
+        ksink: 'primera',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -17,7 +17,7 @@ let notes = [
     },{
         number_code: 1481,
         stock: 1,
-        ksink: '63e705965316e54aaaab35c9',
+        ksink: 'segunda',
         instalation: ['monocomando','dosificador'],
         comments: '',
         internal: false,
@@ -26,14 +26,14 @@ let notes = [
     },{
         number_code: 1711,
         stock: 2,
-        ksink: '63e705965316e54aaaab35af',
+        ksink: 'hola',
         instalation: ['inferior'],
         comments: '',
         internal: false,
         done: false,
         user: '63ddcae20127c43c506cdf5c'
     },{
-        number_code: 1770,
+        number_code: 1711,
         stock: 1,
         ksink: '63e705965316e54aaaab35ea',
         instalation: ['inferior'],
@@ -44,7 +44,7 @@ let notes = [
     },{
         number_code: 1816,
         stock: 1,
-        ksink: '63e705965316e54aaaab35c9',
+        ksink: 'segunda',
         instalation: ['monocomando','dosificador'],
         comments: '',
         internal: false,
@@ -53,7 +53,7 @@ let notes = [
     },{
         number_code: 1886,
         stock: 1,
-        ksink: '63e705965316e54aaaab35af',
+        ksink: 'hola',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -71,7 +71,7 @@ let notes = [
     },{
         number_code: 1938,
         stock: 1,
-        ksink: '63e705965316e54aaaab35a8',
+        ksink: 'tercer',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -80,7 +80,7 @@ let notes = [
     },{
         number_code: 2025,
         stock: 1,
-        ksink: '63e705965316e54aaaab35e1',
+        ksink: 'hiiii',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -89,7 +89,7 @@ let notes = [
     },{
         number_code: 2063,
         stock: 1,
-        ksink: '63e705965316e54aaaab35c9',
+        ksink: 'segunda',
         instalation: ['monocomando','dosificador'],
         comments: '',
         internal: false,
@@ -98,7 +98,7 @@ let notes = [
     },{
         number_code: 2077,
         stock: 1,
-        ksink: '63e705965316e54aaaab35e1',
+        ksink: 'hiiii',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -116,7 +116,7 @@ let notes = [
     },{
         number_code: 2202,
         stock: 1,
-        ksink: '63e705965316e54aaaab35a8',
+        ksink: 'tercer',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -125,7 +125,7 @@ let notes = [
     },{
         number_code: 2212,
         stock: 1,
-        ksink: '63e705965316e54aaaab35cf',
+        ksink: 'adios',
         instalation: ['monocomando','dosificador'],
         comments: '',
         internal: false,
@@ -134,7 +134,7 @@ let notes = [
     },{
         number_code: 2212,
         stock: 1,
-        accesory: '63e701da9f1ea7681a702f4e',
+        accesory: 'chau',
         comments: '',
         internal: false,
         done: false,
@@ -142,7 +142,7 @@ let notes = [
     },{
         number_code: 2228,
         stock: 1,
-        ksink: '63e705965316e54aaaab35af',
+        ksink: 'hola',
         instalation: ['inferior'],
         comments: '',
         internal: false,
@@ -151,7 +151,7 @@ let notes = [
     },{
         number_code: 2235,
         stock: 1,
-        ksink: '63e705965316e54aaaab35af',
+        ksink: 'hola',
         instalation: ['inferior'],
         comments: '',
         internal: false,
