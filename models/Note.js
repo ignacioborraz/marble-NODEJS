@@ -6,7 +6,7 @@ const schema = new mongoose.Schema ({
     plate: { type: mongoose.Types.ObjectId , ref:'plates' },
     ksink: { type: mongoose.Types.ObjectId , ref:'ksinks' },
     instalation: [{ type: String, enum: ['monocomando','dosificador','tres agujeros','inferior'] }],
-    accesory: [{ type: mongoose.Types.ObjectId , ref:'accs' }],
+    accesory: [{ type: mongoose.Types.ObjectId , ref:'accesories' }],
     comments: { type:String },
     client: { type: mongoose.Types.ObjectId , ref:'clients', require:true },
     internal: { type:Boolean, required:true }, //si es interno o pedido

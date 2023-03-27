@@ -816,7 +816,9 @@ let sinks = [
     }    
 ]
 
-sinks.forEach(each => {
-    each.unique = each.name+each.type
-    Ksink.create(each)
-})
+const creates = async()=> {
+    await Ksink.insertMany(sinks)
+    console.log('done!')
+}
+
+creates()

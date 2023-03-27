@@ -4,7 +4,6 @@ const schema = new mongoose.Schema ({
     order: { type:Number, required:true },
     name: { type:String, required:true }, //codigo según catalogo
     type: { type:String, required:true }, //tipo de acero
-    unique: { type:String, required:true, unique: true },
     photo: { type:String, required:true },
     x: { type:Number, required:true }, //alto
     y: { type:Number, required:true }, //ancho
