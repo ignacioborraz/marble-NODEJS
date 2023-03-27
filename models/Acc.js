@@ -11,5 +11,5 @@ const schema = new mongoose.Schema ({
     versionKey: false
 })
 
-const Acc = mongoose.model('accs',schema)
+const Acc = mongoose.model('accesories',schema)
 module.exports = Acc
