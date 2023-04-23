@@ -16,7 +16,7 @@ const controller = {
 
     all: async(req,res,next) => {
         try {
-            let all = await Client.find().select('name').sort({ name: 1})
+            let all = await Client.find().select('name company').sort({ name: 1 })
             return res.status(200).json({
                 response: { clients: all },
                 success: true

@@ -6,7 +6,7 @@ module.exports = (schema) => [
                 success: false,
                 method: req.method,
                 path: req.url,
-                response: data.error.details
+                response: data.error.details.map(err=>err.message)
             })
         }
         next()

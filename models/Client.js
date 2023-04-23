@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema ({
     name: { type:String },
-    company: { type:String },
-    photo: {type:String }
+    company: { type:String }
 },{
     timestamps: true
 },{
