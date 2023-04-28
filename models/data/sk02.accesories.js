@@ -288,4 +288,9 @@ let accs = [
     }
 ]
 
-Acc.insertMany(accs)
+const creates = async()=> {
+    await Acc.insertMany(accs)
+    console.log('done!')
+}
+
+creates()

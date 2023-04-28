@@ -17,6 +17,18 @@ const controller = {
     all: async(req,res,next) => {
         try {
             let all = await Client.find().select('name company').sort({ name: 1 })
+            all = all.map(each=> {
+                let _id =each._id
+                let company = each.company ?? null
+                let name = each.name ?? null
+                let client
+                if (company && name) {
+                    client = name+' - '+company
+                } else {
+                    client = name || company
+                }
+                return { _id,name:client }
+            })
             return res.status(200).json({
                 response: { clients: all },
                 success: true

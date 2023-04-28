@@ -8,7 +8,7 @@ const schema = new mongoose.Schema ({
     instalation: [{ type: String, enum: ['monocomando','dosificador','tres agujeros','inferior'] }],
     accesory: [{ type: mongoose.Types.ObjectId , ref:'accesories' }],
     comments: { type:String },
-    client: { type: mongoose.Types.ObjectId , ref:'clients', require:true },
+    client: { type: mongoose.Types.ObjectId , ref:'clients' },
     internal: { type:Boolean, required:true }, //si es interno o pedido
     done: { type:Boolean, required:true }, //si se entregó
     user: { type: mongoose.Types.ObjectId , ref:'users', require:true }

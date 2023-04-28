@@ -66,43 +66,61 @@ const controller = {
     },
 
     all: async(req,res,next) => {
-        let query ={}
-        let order = {}
+        let query = {}
+        let orQuery = []
+        let order = { number_code: 1 }
         if (req.query.type==='internal') {
             query.internal = true
-            order.internal = 'asc'
-            if (req.query.text) {
-                query.internal = new RegExp(req.query.text, 'i')
-            }
         }
         if (req.query.type==='note') {
-            query.note = null
+            query.internal = false
             query.done = false
-            order.note = 'asc'
         }
         if (req.query.type==='done') {
             query.done = true
         }
-        if (req.query.note) {
-            query.number_code = new RegExp(`${req.query.note}\\d`, 'g')
+        if (req.query.comments) {
+            query.number_code = new RegExp(req.query.comments, 'i')
         }
         if (req.query.comments) {
-            query.comments = new RegExp(req.query.comments, 'i')
+            orQuery.push({ name: new RegExp(req.query.comments, 'i') })
+            orQuery.push({ company: new RegExp(req.query.comments, 'i') })
         }
         try {
-            let all = await Note.find(query).populate('client','name -_id')
-            let number_codes = [...(new Set(all.map(each => each.number_code)))]
-            let data = number_codes.map(number_code => {
-                let products = all.filter(one => one.number_code === number_code).length                
-                let client = all.find(one => one.number_code === number_code).client.name
-                return { number_code,products,client }
-            })
-            if (data?.length===0) {
+            let all = await Note.find(query).populate({
+                path: 'client',
+                select: 'name company -_id',
+                sort: { name: 1 }
+            }).sort(order)
+            if (!all.length) {
+                delete query.number_code
+                all = await Note.find(query).populate({
+                    path: 'client',
+                    select: 'name company -_id',
+                    match: { '$or': orQuery },
+                    sort: { name: 1 }
+                }).sort(order)
+                all = all.filter(each => each.client)
+            }
+            if (!all.length) {
                 return res.status(200).json({
                     response: [],
                     success: false
                 })
             }
+            let number_codes = [...(new Set(all.map(each => each.number_code)))]
+            let data = number_codes.map(number_code => {
+                let products = all.filter(one => one.number_code === number_code).length
+                let company = all.find(one => one.number_code === number_code).client.company ?? null
+                let name = all.find(one => one.number_code === number_code).client.name ?? null
+                let client
+                if (company && name) {
+                    client = name+' - '+company
+                } else {
+                    client = name || company
+                }
+                return { number_code,products,client }
+            })            
             return res.status(200).json({
                 response: data,
                 success: true
@@ -345,6 +363,33 @@ const controller = {
             next(error)
         }
     },
+
+    getAll: async(req,res,next) => {
+        let query = {}
+        if (req.query.text) {
+            query.name = new RegExp(req.query.text, 'i')
+        }
+        try {
+            let ksinks = await Ksink.find({ ...query,stock: { $lte: 0 }}).select('name type photo stock').sort({ stock:1,type:1 })
+            let ksinks0 = await Ksink.find({ ...query,stock: { $gt: 0, $lte: 10 }}).select('name type photo stock').sort({ stock:1,type:1 })
+            let ksinks10 = await Ksink.find({ ...query,stock: { $gt: 10 }}).select('name type photo stock').sort({ stock:1,type:1 })
+            let accesories = await Acc.find({ ...query,stock: { $lte: 0 }}).select('name photo stock').sort({ stock:1,name:1 })
+            let accesories0 = await Acc.find({ ...query,stock: { $gt: 0, $lte: 10 }}).select('name photo stock').sort({ stock:1,name:1 })
+            let accesories10 = await Acc.find({ ...query,stock: { $gt: 10 }}).select('name photo stock').sort({ stock:1,name:1 })
+            //faltan las plates
+            let response = {
+                accesories:  { stock_1: accesories, stock_2: accesories0, stock_3: accesories10 },
+                ksinks: { stock_1: ksinks, stock_2: ksinks0, stock_3: ksinks10 },
+                plates: {}
+            }
+            return res.status(200).json({
+                response,
+                success: true
+            })
+        } catch(error) {
+            next(error)
+        }        
+    }
     
 }
 
